@@ -1,14 +1,16 @@
 # Database de desenvolvimento
 Banco de Dados de desenvolvimento do projeto Foninho
 
+![Diagrama ER](src/diagrama.png)
+
 ### Sumário:
 
 1. Diretório
 2. Modo de uso
 3. Testar o funcionamento
-    3a. Manualmente
-    3b. Utilizando JavaScript
-    3c. Importante
+    - Manualmente
+    - Utilizando JavaScript
+    - Importante
 4. Acessando o Banco de Dados pelo código do projeto
 
 # Diretório
@@ -40,11 +42,11 @@ docker-compose up -d
 ```-d``` é a flag que faz o ambiente ser executado em segundo plano para não tomar controle do seu terminal (caso prefira pode omitir essa flag, e encerrar o container utilizando ctrl+c)
 
 Agora o container docker está em execução.
-O usuário de acesso é ```dev```
-A senha é ```dev```
-O banco de dados principal é ```devdb```
-O host é o ```localhost``` ou ```127.0.0.1```
-A porta é ```5432```
+- O usuário de acesso é ```dev```
+- A senha é ```dev```
+- O banco de dados principal é ```devdb```
+- O host é o ```localhost``` ou ```127.0.0.1```
+- A porta é ```5432```
 
 O banco de dados agora pode ser acessado.
 
@@ -58,16 +60,16 @@ docker exec -it dev_postgres psql -U dev -b devdb
 ```
 
 Onde:
-```docker``` é o comando docker
-```exec``` serve para enviar uma linha de comando à linha de terminal do container
-```-it``` é para acessar o terminal do container pelo seu terminal
-```dev_postgres``` é o nome do container que vai receber o comando
-```psql -U dev -b devdb``` é o comando que será enviado ao container
+- ```docker``` é o comando docker
+- ```exec``` serve para enviar uma linha de comando à linha de - terminal do container
+- ```-it``` é para acessar o terminal do container pelo seu terminal
+- ```dev_postgres``` é o nome do container que vai receber o comando
+- ```psql -U dev -b devdb``` é o comando que será enviado ao container
 
 E:
-```psql``` é o comando para acessar a interface do postgres
-```-U dev``` para informar o usuário
-```-b devdb``` para especificar o banco de dados
+- ```psql``` é o comando para acessar a interface do postgres
+- ```-U dev``` para informar o usuário
+- ```-b devdb``` para especificar o banco de dados
 
 Uma nova interface no terminal agora deve aparecer da seguinte maneira:
 ```devdb=#```
@@ -122,8 +124,8 @@ O arquivo ```init/init.sql``` é o arquivo que será lido pelo Postgres quando o
 # Acessando o Banco de Dados pelo código do projeto
 
 Para realizar as requisições ao banco de dados em código JS dê uma olhada nos arquivos ```connect.js``` e ```example.js``` desse diretório.
-```connect.js``` é o módulo que realiza a conexão ao banco de dados.
-```example.js``` é um arquivo que demonstra a utilização da função ```getClient``` do módulo ```connect.js```.
+- ```connect.js``` é o módulo que realiza a conexão ao banco de dados.
+- ```example.js``` é um arquivo que demonstra a utilização da função ```getClient``` do módulo ```connect.js```.
 
 Em geral, funcina da seguinte forma:
 
