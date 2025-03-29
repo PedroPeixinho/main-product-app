@@ -26,10 +26,10 @@ function runPythonScript(codigo) {
 
 if (!fs.existsSync(dbPath)) {
   console.log("Banco de dados não encontrado. Executando scripts para criação...");
-  runPythonScript("BD_Create.py");
+  runPythonScript("../db/BD_Create.py");
 
   setTimeout(() => {
-    runPythonScript("mapeamento.py");
+    runPythonScript("../db/mapeamento.py");
   }, 1000);
 } else {
   console.log("Banco de dados já existe. Pulando execução dos scripts.");
