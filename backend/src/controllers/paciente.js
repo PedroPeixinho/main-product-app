@@ -62,7 +62,7 @@ class PacienteController {
       c.data_hora
       FROM paciente p
       INNER JOIN consultas c ON p.cpf = c.cpf_paciente
-      WHERE c.data_hora > datetime('now')
+      WHERE c.data_hora >= datetime('now')
     `;
 
     db.all(query, [], (err, rows) => {
