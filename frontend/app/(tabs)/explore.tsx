@@ -146,7 +146,11 @@ export default function Explore() {
   return (
     <>
       <View style={styles.floatingActionButton}>
-        <FloatingAction />
+        <FloatingAction
+          onPress={() => {
+            router.navigate("../patientProfile/teste");
+          }}
+        />
       </View>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
