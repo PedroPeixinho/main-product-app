@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, SafeAreaView, View, Pressable } from "react-native";
+import React from 'react';
+import { StyleSheet, SafeAreaView, View, Pressable } from 'react-native';
 import Animated, {
   withDelay,
   interpolate,
@@ -7,7 +7,7 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -57,7 +57,7 @@ export default function FloatingAction() {
     // highlight-next-line
     const moveValue = interpolate(Number(isExpanded.value), [0, 1], [0, 2]);
     const translateValue = withTiming(moveValue);
-    const rotateValue = isExpanded.value ? "45deg" : "0deg";
+    const rotateValue = isExpanded.value ? '45deg' : '0deg';
 
     return {
       transform: [
@@ -82,17 +82,17 @@ export default function FloatingAction() {
           <FloatingActionButton
             isExpanded={isExpanded}
             index={1}
-            buttonLetter={"M"}
+            buttonLetter={'M'}
           />
           <FloatingActionButton
             isExpanded={isExpanded}
             index={2}
-            buttonLetter={"W"}
+            buttonLetter={'W'}
           />
           <FloatingActionButton
             isExpanded={isExpanded}
             index={3}
-            buttonLetter={"S"}
+            buttonLetter={'S'}
           />
         </View>
       </View>
@@ -106,52 +106,52 @@ const mainButtonStyles = StyleSheet.create({
     height: 56,
     width: 56,
     borderRadius: 100,
-    backgroundColor: "#006FFD",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#006FFD',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     fontSize: 24,
-    color: "#f8f9ff",
+    color: '#f8f9ff',
   },
 });
 
 const styles = StyleSheet.create({
   mainContainer: {
-    position: "relative",
+    position: 'relative',
     height: 260,
-    width: "100%",
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   button: {
     width: 40,
     height: 40,
-    backgroundColor: "#EAF2FF",
-    position: "absolute",
+    backgroundColor: '#EAF2FF',
+    position: 'absolute',
     borderRadius: 100,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: -2,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   buttonContainer: {
-    position: "absolute",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   shadow: {
-    shadowColor: "#171717",
+    shadowColor: '#171717',
     shadowOffset: { width: -0.5, height: 3.5 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
   content: {
-    color: "#006FFD",
+    color: '#006FFD',
     fontWeight: 500,
   },
 });
