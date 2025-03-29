@@ -14,7 +14,32 @@ CREATE TABLE IF NOT EXISTS paciente (
     cpf_fono TEXT NOT NULL,
     nome TEXT NOT NULL,
     cpf TEXT PRIMARY KEY,
-    feedback TEXT NOT NULL DEFAULT ''
+    feedback TEXT NOT NULL DEFAULT '',
+    dia_consulta INTEGER,
+    status TEXT NOT NULL DEFAULT 'emAvaliacao',
+    horario_consulta TEXT,
+    avatar_url TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS duvidas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cpf_paciente TEXT NOT NULL,
+    data_hora TEXT NOT NULL,
+    mensagem TEXT NOT NULL,
+    lida BOOLEAN NOT NULL DEFAULT 0,
+    FOREIGN KEY (cpf_paciente) REFERENCES paciente (cpf)
+)
+""")
+
+# Criar a tabela "consultas"
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS consultas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cpf_paciente TEXT NOT NULL,
+    data_hora TEXT NOT NULL,
+    FOREIGN KEY (cpf_paciente) REFERENCES paciente (cpf)
 )
 """)
 
