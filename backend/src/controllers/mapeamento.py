@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 # Conectar ao banco de dados
 connection = sqlite3.connect("database.db")
@@ -26,4 +27,4 @@ VALUES (?, ?, ?, ?, ?, ?, ?)
 connection.commit()
 connection.close()
 
-print("Paciente e exercícios mapeados com sucesso!")
+print("Dados inseridos com sucesso!")

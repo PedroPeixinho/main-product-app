@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
@@ -25,7 +28,38 @@ export default function Teste() {
   const [selectedSubTab, setSelectedSubTab] = useState('7 dias'); 
   const [exercises, setExercises] = useState<Exercise[]>([]); 
   const [patientName, setPatientName] = useState(''); 
+  const [feedback, setFeedback] = useState(""); // Estado para armazenar o feedback
+
   const cpf = '12345678900'; 
+
+  const sendFeedback = async () => {
+    if (!feedback.trim()) {
+      alert("Por favor, digite um feedback antes de enviar.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:3000/pacientes/${cpf}/feedback`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ feedback }),
+      });
+  
+      if (response.ok) {
+        alert("Feedback enviado com sucesso!");
+        setFeedback(""); // Limpa o campo de texto após o envio
+      } else {
+        const errorData = await response.json();
+        alert(`Erro ao enviar feedback: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar feedback:", error);
+      alert("Erro ao enviar feedback. Tente novamente mais tarde.");
+    }
+  };
+
 
   const fetchPatientName = async () => {
     try {
@@ -97,169 +131,178 @@ export default function Teste() {
 
 
 
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <MaterialIcons name="arrow-back-ios" size={24} color="#006FFD" />
-        </TouchableOpacity>
-        <Text style={styles.title}>Paciente</Text>
-        <Text></Text>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.profileBannerDiv}>
-          <Image
-            style={{ width: 52, height: 52, borderRadius: 25 }}
-            source={{
-              uri: 'https://avatars.githubusercontent.com/u/55458349?v=4',
-            }}
-          />
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              gap: 8,
-            }}
-          >
+   return (
+    <View style={{ flex: 1, backgroundColor: '#fff'  }}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <MaterialIcons name="arrow-back-ios" size={24} color="#006FFD" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Paciente</Text>
+          <Text></Text>
+        </View>
+        <View style={styles.body}>
+          <View style={styles.profileBannerDiv}>
+            <Image
+              style={{ width: 52, height: 52, borderRadius: 25 }}
+              source={{
+                uri: 'https://avatars.githubusercontent.com/u/55458349?v=4',
+              }}
+            />
             <View
               style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
                 gap: 8,
               }}
             >
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={{
-                  fontSize: 14,
-                  fontWeight: '600',
-                  color: '#50525A',
-                }}
-              >
-                {patientName || 'Carregando...'} {/* Exibe "Carregando..." enquanto o nome não é carregado */}
-
-              </Text>
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: '#50525A',
-                }}
-              >
-                Terças | 14h
-              </Text>
-            </View>
-            <Entypo name="dots-three-vertical" size={20} color="black" />
-          </View>
-        </View>
-        <View style={styles.divider} />
-
-        {/* Abas */}
-        <View style={styles.tabs}>
-          {['Exercícios', 'Frequência', 'Progresso'].map((tab) => (
-            <TouchableOpacity
-              key={tab}
-              style={styles.tab}
-              onPress={() => setSelectedTab(tab)}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  selectedTab === tab && styles.activeTabText, 
-                ]}
-              >
-                {tab}
-              </Text>
-              {selectedTab === tab && <View style={styles.activeTabLine} />} {}
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Conteúdo das abas */}
-        {selectedTab === 'Progresso' && (
-          <View style={styles.tabContent}>
-            {/* Aba de seleção */}
-            <View style={styles.subTabs}>
-              {['7 dias', 'Mensal', '3 meses'].map((period) => (
-                <TouchableOpacity
-                  key={period}
-                  style={[
-                    styles.subTab,
-                    selectedSubTab === period && styles.activeSubTab, 
-                  ]}
-                  onPress={() => setSelectedSubTab(period)}
+              <View style={{ gap: 8 }}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{
+                    fontSize: 14,
+                    fontWeight: '600',
+                    color: '#50525A',
+                  }}
                 >
-                  <Text
-                    style={[
-                      styles.subTabText,
-                      selectedSubTab === period && styles.activeSubTabText, 
-                    ]}
-                  >
-                    {period}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            
-
-            {/* Progresso */}
-            <View style={{ marginBottom: 8 }}>
-              <Text style={styles.progressTitle}>Progresso</Text>
-            </View>
-
-            <View style={styles.progressContainer}>
-              <Text style={styles.progressPeriod}>{selectedSubTab}</Text>
-              <View
-                style={[
-                  styles.progressCircle,
-                  parseFloat(calculateAverage(selectedSubTab)) >= 4
-                    ? styles.greenCircle
-                    : parseFloat(calculateAverage(selectedSubTab)) >= 2
-                      ? styles.yellowCircle
-                      : styles.redCircle,
-                ]}
-              >
-                <Entypo name="star" size={16} color="#fff" />
-                <Text style={styles.progressText}>{calculateAverage(selectedSubTab)}</Text>
+                  {patientName || 'Carregando...'}
+                </Text>
+                <Text style={{ fontSize: 16, color: '#50525A' }}>
+                  Terças | 14h
+                </Text>
               </View>
+              <Entypo name="dots-three-vertical" size={20} color="black" />
             </View>
+          </View>
+          <View style={styles.divider} />
 
-            
-            <View style={styles.dividerLarge} />
+          {/* Abas */}
+          <View style={styles.tabs}>
+            {['Exercícios', 'Frequência', 'Progresso'].map((tab) => (
+              <TouchableOpacity
+                key={tab}
+                style={styles.tab}
+                onPress={() => setSelectedTab(tab)}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    selectedTab === tab && styles.activeTabText,
+                  ]}
+                >
+                  {tab}
+                </Text>
+                {selectedTab === tab && <View style={styles.activeTabLine} />}
+              </TouchableOpacity>
+            ))}
+          </View>
 
-            {/* Exercícios realizados */}
-            <Text style={styles.tabTitle}>Exercícios Realizados</Text>
-            {exercises.length > 0 ? (
-              <FlatList
-                data={exercises}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <View style={styles.exerciseItem}>
-                    <Text style={styles.exerciseName}>{item.nome_exercicio}</Text>
-                    <View
+          {/* Conteúdo das abas */}
+          {selectedTab === 'Progresso' && (
+            <View style={styles.tabContent}>
+              {/* Aba de seleção */}
+              <View style={styles.subTabs}>
+                {['7 dias', 'Mensal', '3 meses'].map((period) => (
+                  <TouchableOpacity
+                    key={period}
+                    style={[
+                      styles.subTab,
+                      selectedSubTab === period && styles.activeSubTab,
+                    ]}
+                    onPress={() => setSelectedSubTab(period)}
+                  >
+                    <Text
                       style={[
-                        styles.noteCircle,
-                        item.nota_execucao >= 4
-                          ? styles.greenCircle
-                          : item.nota_execucao >= 2
-                            ? styles.yellowCircle
-                            : styles.redCircle,
+                        styles.subTabText,
+                        selectedSubTab === period && styles.activeSubTabText,
                       ]}
                     >
-                      <Entypo name="star" size={16} color="#fff" />
-                      <Text style={styles.noteText}>{item.nota_execucao}</Text>
+                      {period}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* Progresso */}
+              <View style={{ marginBottom: 8 }}>
+                <Text style={styles.progressTitle}>Progresso</Text>
+              </View>
+
+              <View style={styles.progressContainer}>
+                <Text style={styles.progressPeriod}>{selectedSubTab}</Text>
+                <View
+                  style={[
+                    styles.progressCircle,
+                    parseFloat(calculateAverage(selectedSubTab)) >= 4
+                      ? styles.greenCircle
+                      : parseFloat(calculateAverage(selectedSubTab)) >= 2
+                      ? styles.yellowCircle
+                      : styles.redCircle,
+                  ]}
+                >
+                  <Entypo name="star" size={16} color="#fff" />
+                  <Text style={styles.progressText}>
+                    {calculateAverage(selectedSubTab)}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.dividerLarge} />
+
+              {/* Exercícios realizados */}
+              <Text style={styles.tabTitle}>Exercícios Realizados</Text>
+              {exercises.length > 0 ? (
+                <FlatList
+                  data={exercises}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.exerciseItem}>
+                      <Text style={styles.exerciseName}>
+                        {item.nome_exercicio}
+                      </Text>
+                      <View
+                        style={[
+                          styles.noteCircle,
+                          item.nota_execucao >= 4
+                            ? styles.greenCircle
+                            : item.nota_execucao >= 2
+                            ? styles.yellowCircle
+                            : styles.redCircle,
+                        ]}
+                      >
+                        <Entypo name="star" size={16} color="#fff" />
+                        <Text style={styles.noteText}>
+                          {item.nota_execucao}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                )}
-              />
-            ) : (
-              <Text style={styles.noDataText}>Nenhum exercício encontrado.</Text>
-            )}
-          </View>
-        )}
+                  )}
+                />
+              ) : (
+                <Text style={styles.noDataText}>
+                  Nenhum exercício encontrado.
+                </Text>
+              )}
+            </View>
+          )}
+        </View>
+      </ScrollView>
+
+      <View style={styles.feedbackContainer}>
+        <TextInput
+          style={styles.feedbackInput}
+          placeholder="Digite seu feedback..."
+          value={feedback}
+          onChangeText={setFeedback}
+        />
+        <TouchableOpacity style={styles.feedbackButton} onPress={sendFeedback}>
+          <Text style={styles.feedbackButtonText}>Enviar</Text>
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -441,19 +484,7 @@ const styles = StyleSheet.create({
 
 
 
-  progressTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  progressValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#006FFD',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
+
 
 
   dividerLarge: {
@@ -514,6 +545,42 @@ const styles = StyleSheet.create({
 
 
 
+
+  feedbackContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#E7E7E7",
+    backgroundColor: "#fff",
+  },
+  feedbackInput: {
+    flex: 1,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#E7E7E7",
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginRight: 8,
+  },
+  feedbackButton: {
+    backgroundColor: "#006FFD",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  feedbackButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+
+
+  scrollContent: {
+    flexGrow: 1, // Permite que o conteúdo ocupe apenas o espaço necessário
+    paddingBottom: 80, // Espaço para o feedback fixo
+  },
 
 
 });
