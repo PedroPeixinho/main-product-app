@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import FloatingAction from "@/components/FloatingActionButton";
 import { PacienteService } from "@/services/pacientes";
+import WideButton from "@/components/wideButton";
 
 interface Patient {
   id: string;
@@ -24,7 +24,6 @@ interface Patient {
 export default function Explore() {
   const router = useRouter();
   const [searchNomePaciente, setSearchNomePaciente] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("todos");
   const [patients, setPatients] = useState<Patient[]>([]);
   const [filteredPatients, setFilteredPatients] = useState<Patient[]>(patients);
 
@@ -62,20 +61,18 @@ export default function Explore() {
   };
 
   return (
-    <>
-      <View style={styles.floatingActionButton}>
-        <FloatingAction
-          onPress={() => {
-            router.navigate("../patientProfile/patientProfile");
-          }}
-        />
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Pacientes</Text>
       </View>
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Pacientes</Text>
-        </View>
-        <View style={styles.body}>
-          <View style={styles.divider} />
+      <View style={styles.body}>
+        <View style={styles.divider} />
+        <View
+          style={{
+            flex: 1,
+            gap: 16,
+          }}
+        >
           <View style={styles.searchBarDiv}>
             <TextInput
               style={styles.input}
@@ -84,155 +81,123 @@ export default function Explore() {
               placeholder="Pesquise"
               keyboardType="default"
             />
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ flexDirection: "row" }}
-            >
-              {["todos", "emAcompanhamento", "emAvaliacao", "concluido"].map(
-                (status) => (
-                  <TouchableOpacity
-                    key={status}
-                    style={{
-                      marginRight: 8,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        padding: 8,
-                        borderRadius: 16,
-                        backgroundColor:
-                          selectedStatus === status ? "#006FFD" : "#EAF2FF",
-                        color: selectedStatus === status ? "#fff" : "#006FFD",
-                        fontWeight: "bold",
-                        marginTop: 16,
-                      }}
-                      onPress={() => {
-                        setSearchNomePaciente("");
-                        setSelectedStatus(status);
-                        setFilteredPatients(
-                          status === "todos"
-                            ? patients
-                            : patients.filter(
-                                (patient) => patient.status === status
-                              )
-                        );
-                      }}
-                    >
-                      {status === "todos"
-                        ? "Todos"
-                        : status === "emAcompanhamento"
-                          ? "Em acompanhamento"
-                          : status === "emAvaliacao"
-                            ? "Em avaliação"
-                            : "Concluídos"}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              )}
-            </ScrollView>
           </View>
-          <View style={styles.divider} />
-          <View style={styles.pacientesDiv}>
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: "bold",
+          <WideButton
+            text="Cadastrar paciente"
+            onPress={() => {
+              router.navigate("../patientProfile/patientProfile");
+            }}
+          />
+        </View>
+        <View style={styles.pacientesDiv}>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: "bold",
+            }}
+          >
+            {filteredPatients.length} resultados
+          </Text>
+          {filteredPatients.map((item) => (
+            <TouchableOpacity
+              style={styles.patientItemDiv}
+              key={item.id}
+              onPress={() => {
+                router.navigate("../patientProfile/patientProfile");
               }}
             >
-              {filteredPatients.length} resultados
-            </Text>
-            {filteredPatients.map((item) => (
-              <TouchableOpacity
-                style={styles.patientItemDiv}
-                key={item.id}
-                onPress={() => {
-                  router.navigate("../patientProfile/patientProfile");
+              {item.avatarUrl && (
+                <Image
+                  style={{ width: 35, height: 35, borderRadius: 25 }}
+                  source={{
+                    uri: item.avatarUrl,
+                  }}
+                />
+              )}
+              {!item.avatarUrl && (
+                <View
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 25,
+                    backgroundColor: "#E7E7E7",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text>
+                    {item.nome
+                      .split(" ")
+                      .filter(
+                        (_, index, arr) =>
+                          index === 0 || index === arr.length - 1
+                      )
+                      .map((name) => name[0])
+                      .join("")}
+                  </Text>
+                </View>
+              )}
+              <View
+                style={{
+                  flex: 1,
+                  gap: 4,
                 }}
               >
-                {item.avatarUrl && (
-                  <Image
-                    style={{ width: 35, height: 35, borderRadius: 25 }}
-                    source={{
-                      uri: item.avatarUrl,
-                    }}
-                  />
-                )}
-                {!item.avatarUrl && (
-                  <View
-                    style={{
-                      width: 35,
-                      height: 35,
-                      borderRadius: 25,
-                      backgroundColor: "#E7E7E7",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text>
-                      {item.nome
-                        .split(" ")
-                        .filter(
-                          (_, index, arr) =>
-                            index === 0 || index === arr.length - 1
-                        )
-                        .map((name) => name[0])
-                        .join("")}
-                    </Text>
-                  </View>
-                )}
-                <View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "#50525A",
+                    fontFamily: "PlusJakartaSans_600SemiBold",
+                  }}
+                >
+                  {item.nome}
+                </Text>
+                <View style={styles.patientItemSubTextDiv}>
                   <Text
                     style={{
                       color: "#50525A",
-                      fontWeight: 600,
+                      fontSize: 12,
+                      fontFamily: "PlusJakartaSans_400Regular",
                     }}
                   >
-                    {item.nome}
+                    {
+                      [
+                        "Domingos",
+                        "Segundas",
+                        "Terças",
+                        "Quartas",
+                        "Quintas",
+                        "Sextas",
+                        "Sábados",
+                      ][item.diaConsulta]
+                    }
                   </Text>
-                  <View style={styles.patientItemSubTextDiv}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#50525A",
-                      }}
-                    >
-                      {
-                        [
-                          "Domingos",
-                          "Segundas",
-                          "Terças",
-                          "Quartas",
-                          "Quintas",
-                          "Sextas",
-                          "Sábados",
-                        ][item.diaConsulta]
-                      }
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#50525A",
-                      }}
-                    >
-                      |
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#50525A",
-                      }}
-                    >
-                      {item.horarioConsulta}
-                    </Text>
-                  </View>
+                  <Text
+                    style={{
+                      color: "#50525A",
+                      fontSize: 12,
+                      fontFamily: "PlusJakartaSans_400Regular",
+                    }}
+                  >
+                    |
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#50525A",
+                      fontSize: 12,
+                      fontFamily: "PlusJakartaSans_400Regular",
+                    }}
+                  >
+                    {item.horarioConsulta}
+                  </Text>
                 </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
-      </ScrollView>
-    </>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -252,13 +217,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontFamily: "MontserratAlternates_800ExtraBold",
     fontWeight: 900,
   },
   searchBarDiv: {
-    marginTop: 16,
-  },
-  filters: {
-    flexDirection: "row",
     marginTop: 16,
   },
   divider: {
@@ -278,18 +240,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
     padding: 16,
-    backgroundColor: "#F8F9FE",
+    backgroundColor: "#EAF3FF",
     borderRadius: 24,
     marginTop: 16,
   },
   patientItemSubTextDiv: {
     flexDirection: "row",
     gap: 8,
-  },
-  floatingActionButton: {
-    position: "absolute",
-    right: 56,
-    bottom: 56,
-    zIndex: 1,
   },
 });
