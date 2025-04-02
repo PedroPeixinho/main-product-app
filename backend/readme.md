@@ -1,6 +1,12 @@
 # Como funciona o banco de dados
 
-Para iniciar o projeto, basta rodar o comando
+Para iniciar o projeto, primeiro instale as dependências com o comando:
+
+```bash
+npm install
+```
+
+Depois, basta rodar o comando:
 
 ```bash
 npm run dev
@@ -12,7 +18,15 @@ A estrutura base do banco de dados está assim, mas se necessário, podem ser ad
 
 Vá no arquivo `prisma/schema.prisma` e altere a definição da tabela conforme necessário.
 
-Dica: Instale a extensao do vscode do Prisma e leia a documentacao caso ela alerte erros.
+Depois execute:
+
+```bash
+npx prisma migrate dev
+```
+
+(lembre-se de inserir uma descricao concisa das mudancas feitas, max 1 linha)
+
+Dica: Instale a extensão do VS Code do Prisma e leia a documentação caso ela alerte erros.
 
 ## Como gerar dados para popular a tabela
 
@@ -45,7 +59,7 @@ async function main() {
 }
 ```
 
-Depois disso, basta rodar o comando
+Depois disso, basta rodar o comando:
 
 ```bash
 npx prisma db seed
@@ -55,7 +69,7 @@ para popular o banco de dados com os dados adicionados.
 
 ## Como visualizar as tabelas e os dados
 
-Para visualizar as tabelas e os dados do banco de dados, basta rodar o comando
+Para visualizar as tabelas e os dados do banco de dados, basta rodar o comando:
 
 ```bash
 npx prisma studio
