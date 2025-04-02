@@ -1,10 +1,18 @@
 # Como funciona o banco de dados
 
-Para iniciar o projeto, basta rodar o comando `npm run dev`. A estrutura base do banco de dados está assim, mas se necessário, podem ser adicionados novos campos ou tabelas.
+Para iniciar o projeto, basta rodar o comando
+
+```bash
+npm run dev
+```
+
+A estrutura base do banco de dados está assim, mas se necessário, podem ser adicionados novos campos ou tabelas.
 
 ## Como atualizar uma tabela
 
-Vá no arquivo `prisma/schema.prisma` e altere a definição da tabela conforme necessário. Após realizar as alterações, certifique-se de rodar o comando `npx prisma migrate dev` para aplicar as mudanças no banco de dados.
+Vá no arquivo `prisma/schema.prisma` e altere a definição da tabela conforme necessário.
+
+Dica: Instale a extensao do vscode do Prisma e leia a documentacao caso ela alerte erros.
 
 ## Como gerar dados para popular a tabela
 
@@ -37,4 +45,20 @@ async function main() {
 }
 ```
 
-Depois disso, basta rodar o comando `npx prisma db seed` para popular o banco de dados com os dados adicionados.
+Depois disso, basta rodar o comando
+
+```bash
+npx prisma db seed
+```
+
+para popular o banco de dados com os dados adicionados.
+
+## Como visualizar as tabelas e os dados
+
+Para visualizar as tabelas e os dados do banco de dados, basta rodar o comando
+
+```bash
+npx prisma studio
+```
+
+Isso abrirá uma interface gráfica no navegador, permitindo explorar e editar os dados de forma intuitiva.
