@@ -6,6 +6,5 @@ const pacienteController = new PacienteController();
 
 router.get("/", pacienteController.getAllPacientes);
 router.get("/duvidas", pacienteController.getAllPacientesDuvidas);
-router.get("/consultas", pacienteController.getAllPacientesConsultas);
 
 module.exports = router;

@@ -21,7 +21,6 @@ model Paciente {
   horario_consulta String?
   avatar_url       String?
   duvidas          Duvidas[]
-  consultas        Consultas[]
   exerciciosRealizados ExerciciosRealizados[]
   exercicios       Exercicios[]
 }
@@ -32,13 +31,6 @@ model Duvidas {
   data_hora   String
   mensagem    String
   lida        Boolean @default(false)
-  paciente    Paciente @relation(fields: [cpf_paciente], references: [cpf])
-}
-
-model Consultas {
-  id          Int    @id @default(autoincrement())
-  cpf_paciente String
-  data_hora   String
   paciente    Paciente @relation(fields: [cpf_paciente], references: [cpf])
 }
 

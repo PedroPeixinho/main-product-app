@@ -14,48 +14,35 @@ class PacienteController {
 
   async getAllPacientesDuvidas(req, res) {
     try {
-      const pacientesDuvidas = await prisma.$queryRaw`
-        SELECT 
-          p.nome, 
-          p.cpf, 
-          p.avatar_url, 
-          COUNT(d.cpf_paciente) AS qtd_duvidas_nao_lidas,
-          MAX(d.data_hora) AS ultima_duvida
-        FROM paciente p
-        LEFT JOIN duvidas d ON p.cpf = d.cpf_paciente AND d.lida = 0
-        GROUP BY p.cpf
-      `;
+      const pacientesDuvidas = await prisma.paciente.findMany({
+        select: {
+          nome: true,
+          cpf: true,
+          avatar_url: true,
+          duvidas: {
+            where: { lida: false },
+            select: {
+              data_hora: true,
+            },
+          },
+        },
+      });
+
       const formattedPacientesDuvidas = pacientesDuvidas.map((paciente) => ({
-        ...paciente,
-        qtd_duvidas_nao_lidas: Number(paciente.qtd_duvidas_nao_lidas),
+        nome: paciente.nome,
+        cpf: paciente.cpf,
+        avatar_url: paciente.avatar_url,
+        qtd_duvidas_nao_lidas: paciente.duvidas.length,
+        ultima_duvida: paciente.duvidas.length
+          ? paciente.duvidas.reduce((latest, current) =>
+              latest.data_hora > current.data_hora ? latest : current
+            ).data_hora
+          : null,
       }));
       res.status(200).json(formattedPacientesDuvidas);
     } catch (err) {
       console.error("Erro ao buscar dúvidas dos pacientes:", err.message);
       res.status(500).json({ error: "Erro ao buscar dúvidas dos pacientes." });
-    }
-  }
-
-  async getAllPacientesConsultas(req, res) {
-    try {
-      const pacientesConsultas = await prisma.$queryRaw`
-        SELECT 
-          c.id,
-          p.nome, 
-          c.data_hora
-        FROM paciente p
-        INNER JOIN consultas c ON p.cpf = c.cpf_paciente
-        WHERE c.data_hora >= datetime('now')
-      `;
-      res.status(200).json(pacientesConsultas);
-    } catch (err) {
-      console.error(
-        "Erro ao buscar consultas futuras dos pacientes:",
-        err.message
-      );
-      res
-        .status(500)
-        .json({ error: "Erro ao buscar consultas futuras dos pacientes." });
     }
   }
 }

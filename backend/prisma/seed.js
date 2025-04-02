@@ -128,34 +128,6 @@ async function main() {
     }
   }
 
-  // Inserir consultas para os pacientes
-  const consultas = [
-    {
-      cpf_paciente: "11111111111",
-      data_hora: new Date("2024-03-30T09:00:00").toString(),
-    },
-    {
-      cpf_paciente: "22222222222",
-      data_hora: new Date("2025-03-30T10:30:00").toString(),
-    },
-    {
-      cpf_paciente: "33333333333",
-      data_hora: new Date("2023-03-30T11:45:00").toString(),
-    },
-    {
-      cpf_paciente: "44444444444",
-      data_hora: new Date("2025-04-02T13:15:00").toString(),
-    },
-    {
-      cpf_paciente: "55555555555",
-      data_hora: new Date("2025-03-30T15:00:00").toString(),
-    },
-  ];
-
-  for (const consulta of consultas) {
-    await prisma.consultas.create({ data: consulta });
-  }
-
   // Inserir dois exercícios realizados pelo paciente
   const exercicios = [
     {
