@@ -66,7 +66,7 @@ export default function Explore() {
       <View style={styles.floatingActionButton}>
         <FloatingAction
           onPress={() => {
-            router.navigate("../patientProfile/teste");
+            router.navigate("../patientProfile/patientProfile");
           }}
         />
       </View>
@@ -147,7 +147,7 @@ export default function Explore() {
                 style={styles.patientItemDiv}
                 key={item.id}
                 onPress={() => {
-                  router.navigate("../patientProfile/teste");
+                  router.navigate("../patientProfile/patientProfile");
                 }}
               >
                 {item.avatarUrl && (

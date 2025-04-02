@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function LoginScreen() {
           onPress={() => setPasswordVisible(!passwordVisible)}
         >
           <Ionicons
-            name={passwordVisible ? 'eye' : 'eye-off'}
+            name={passwordVisible ? "eye" : "eye-off"}
             size={20}
             color="#888"
           />
@@ -55,7 +55,7 @@ export default function LoginScreen() {
 
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => router.push('../(tabs)/home')}
+        onPress={() => router.push("../(tabs)/home")}
       >
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
@@ -70,61 +70,61 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8F8F8',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8F8F8",
   },
   logo: {
     fontSize: 54,
     marginBottom: 5,
-    fontFamily: 'MontserratAlternates_800ExtraBold',
+    fontFamily: "MontserratAlternates_800ExtraBold",
   },
   subtitle: {
     fontSize: 20,
     marginBottom: 30,
-    fontFamily: 'PlusJakartaSans_700Bold',
+    fontFamily: "PlusJakartaSans_700Bold",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '80%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "80%",
     borderRadius: 10,
     paddingHorizontal: 16,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   input: {
     flex: 1,
     height: 50,
-    color: '#333',
+    color: "#333",
   },
   eyeIcon: {
     padding: 10,
   },
   forgotPassword: {
-    color: '#007BFF',
+    color: "#007BFF",
     fontSize: 14,
   },
   loginButton: {
-    backgroundColor: '#007BFF',
-    width: '80%',
+    backgroundColor: "#007BFF",
+    width: "80%",
     paddingVertical: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   loginButtonText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   registerText: {
     marginTop: 20,
     fontSize: 14,
-    color: '#555',
+    color: "#555",
   },
   registerLink: {
-    color: '#007BFF',
-    fontWeight: 'bold',
+    color: "#007BFF",
+    fontWeight: "bold",
   },
 });
