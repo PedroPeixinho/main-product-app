@@ -7,7 +7,7 @@ app.use(cors());
 //Ellian/Progresso
 const router = require("./routes/progresso.routes");
 const pacienteRoutes = require("./routes/paciente.routes");
-app.use("/progresso", router);
+// app.use("/progresso", router);
 app.use("/pacientes", pacienteRoutes);
 
 app.listen(3000, () => {
