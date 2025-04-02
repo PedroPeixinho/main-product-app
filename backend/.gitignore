@@ -28,7 +28,6 @@ dist/
 lib/
 
 # Env
-.env
 .env.test
 .env.dev
 .env.prod
