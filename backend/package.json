@@ -11,8 +11,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
-    "dev": "node --watch src/app.js"
+    "start": "npx prisma migrate deploy && node src/app.js",
+    "dev": "npx prisma migrate dev && node --watch src/app.js"
   },
   "keywords": [],
   "author": "",
