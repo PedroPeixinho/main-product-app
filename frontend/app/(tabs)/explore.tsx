@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { PacienteService } from "@/services/pacientes";
 import WideButton from "@/components/wideButton";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface Patient {
   id: string;
@@ -74,6 +75,14 @@ export default function Explore() {
           }}
         >
           <View style={styles.searchBarDiv}>
+            <FontAwesome
+              name="search"
+              size={16}
+              color="#2F3036"
+              style={{
+                padding: 10,
+              }}
+            />
             <TextInput
               style={styles.input}
               onChangeText={filterPatients}
@@ -221,18 +230,24 @@ const styles = StyleSheet.create({
     fontWeight: 900,
   },
   searchBarDiv: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 16,
+    borderRadius: 24,
+    padding: 10,
+    backgroundColor: "#F8F9FE",
+  },
+  input: {
+    backgroundColor: "#F8F9FE",
+    flex: 1,
+    maxHeight: 40,
   },
   divider: {
     marginTop: 16,
     height: 1,
     backgroundColor: "#E7E7E7",
   },
-  input: {
-    backgroundColor: "#F8F9FE",
-    borderRadius: 24,
-    padding: 16,
-  },
+
   pacientesDiv: {
     marginTop: 16,
   },
