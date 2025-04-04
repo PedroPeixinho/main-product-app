@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const isAuthenticated = async (): Promise<boolean> => {
@@ -14,11 +16,6 @@ export const isAuthenticated = async (): Promise<boolean> => {
 };
 
 
-export const logout = async (): Promise<void> => {
-  await AsyncStorage.removeItem("token"); // Remove token
-};
-
-
 export const getUserDetails = async (): Promise<any | null> => {
   try {
     const token = await AsyncStorage.getItem("token");
@@ -28,7 +25,7 @@ export const getUserDetails = async (): Promise<any | null> => {
     const is_fono = payload.is_fono; // Get is_fono flag
 
     const endpoint = is_fono ? "/auth/fono/details" : "/auth/patient/details";
-    const response = await fetch(`http://localhost:3000${endpoint}`, {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}${endpoint}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,4 +43,34 @@ export const getUserDetails = async (): Promise<any | null> => {
     console.error("Error fetching user details:", error);
     return null;
   }
+};
+
+
+export const useAuthRedirect = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const auth = await isAuthenticated();
+        if (!auth) return;
+
+        const userDetails = await getUserDetails();
+        if (userDetails?.is_fono) {
+          router.push("../(tabs)/home");    //MUDAR ROTA
+        } else {
+          router.push("../(tabs)/home2");    //MUDAR ROTA
+        }
+      } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+};
+
+
+export const logout = async (): Promise<void> => {
+  await AsyncStorage.removeItem("token"); // Remove token
 };

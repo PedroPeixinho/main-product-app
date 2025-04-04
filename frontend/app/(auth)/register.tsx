@@ -12,6 +12,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthRedirect} from '../../services/auth';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function RegisterScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useAuthRedirect()
 
   const handleRegister = async () => {
     setErrorMessage('');
@@ -38,7 +40,7 @@ export default function RegisterScreen() {
     }
   
     try {
-      const response = await fetch('http://localhost:3000/auth/fono/register', {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/fono/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, cpf, crfa, email, senha }),
@@ -229,7 +231,6 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 16,
     fontFamily: 'PlusJakartaSans_600',
-    outlineStyle: 'none',
   },
   eyeIcon: {
     padding: 10,

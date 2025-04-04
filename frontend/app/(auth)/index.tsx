@@ -7,30 +7,12 @@ import {
   StyleSheet
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { isAuthenticated, getUserDetails } from '../../services/auth';
+import { useAuthRedirect} from '../../services/auth';
 
 export default function WelcomeScreen() {
-  const router = useRouter();
+  useAuthRedirect()
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const auth = await isAuthenticated();
-        if (!auth) return;
-  
-        const userDetails = await getUserDetails();
-        if (userDetails?.is_fono) {
-          router.push('../(tabs)/home');
-        } else {
-          router.push('../(tabs)/home2');
-        }
-      } catch (error) {
-        console.error("Erro ao verificar autenticação:", error);
-      }
-    };
-  
-    checkAuth();
-  }, [router]);
+  const router = useRouter();
 
   return (
     <View style={styles.container}>

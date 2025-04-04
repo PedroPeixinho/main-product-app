@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthRedirect} from '../../services/auth';
 
 export default function FonoLoginScreen() {
   const router = useRouter();
@@ -20,12 +21,14 @@ export default function FonoLoginScreen() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useAuthRedirect()
+
   const handleLogin = async () => {
     setErrorMessage('');
     setLoading(true);
   
     try {
-      const response = await fetch('http://localhost:3000/auth/fono/login', {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/fono/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha: password }),
