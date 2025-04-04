@@ -8,6 +8,10 @@ app.use(cors())
 const router = require("./views/progresso.routes");
 app.use("/", router);
 
+//Aline/ExerciciosFono
+const exercisesRouter = require("./views/exercises.routes");
+app.use("/", exercisesRouter);
+
 app.listen(3000, () => {
   console.log("Server is listening on port 3000");
 });
