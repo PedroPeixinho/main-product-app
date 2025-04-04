@@ -1,0 +1,270 @@
+import Entypo from "@expo/vector-icons/Entypo";
+
+
+interface Appointment {
+  id: string;
+  nomePaciente: string;
+  hour: string;
+}
+
+// useStates
+  const [nextAppointmentDate, setNextAppointmentDate] = useState<Date>();
+  const [appointmentsToday, setAppointmentsToday] = useState<Appointment[]>([]);
+  const [totalPatients, setTotalPatients] = useState();
+  const [patientsInEvaluation, setPatientsInEvaluation] = useState();
+  const [patientsInTreatment, setPatientsInTreatment] = useState(3);
+  const [patientsConcluded, setPatientsConcluded] = useState();
+
+// useEffects
+    const fetchPatients = async () => {
+      try {
+        const response = await PacienteService.getPacientes();
+        setTotalPatients(response.length);
+        setPatientsInEvaluation(
+          response.filter((patient: any) => patient.status === "emAvaliacao")
+            .length
+        );
+        setPatientsConcluded(
+          response.filter((patient: any) => patient.status === "concluido")
+            .length
+        );
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+      }
+    };
+
+    const fetchConsults = async () => {
+      try {
+        const response = await PacienteService.getConsultas();
+        const temp: any = response.map((consulta: any) => ({
+          id: consulta.id,
+          nomePaciente: consulta.nome,
+          hour: new Date(consulta.data_hora).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }),
+          date: new Date(consulta.data_hora),
+        }));
+
+        const minDate = temp.reduce(
+          (min: any, current: any) => (current.date < min ? current.date : min),
+          temp[0].date
+        );
+
+        const filteredAppointments = temp.filter(
+          (appointment: any) =>
+            appointment.date.toDateString() === minDate.toDateString()
+        );
+
+        setAppointmentsToday(filteredAppointments);
+
+        setNextAppointmentDate(new Date(response[0].data_hora));
+        setAppointmentsToday(filteredAppointments);
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+      }
+    };
+
+    fetchConsults();
+    fetchPatients();
+
+
+// html
+
+{/* <View style={styles.appointmentDiv}>
+        <View style={styles.appointmentDivHeader}>
+          <Text style={styles.subtitle}>Agendamentos</Text>
+          {nextAppointmentDate && (
+            <Text style={styles.secondarySubtitle}>
+              {
+                [
+                  "Domingo",
+                  "Segunda-feira",
+                  "Terça-feira",
+                  "Quarta-feira",
+                  "Quinta-feira",
+                  "Sexta-feira",
+                  "Sábado",
+                ][nextAppointmentDate.getDay()]
+              }
+              ,
+              {` ${nextAppointmentDate.getDate().toString().padStart(2, "0")}/${(nextAppointmentDate.getMonth() + 1).toString().padStart(2, "0")}/${nextAppointmentDate.getFullYear()}`}
+            </Text>
+          )}
+        </View>
+        <View style={styles.appointmentDivBody}>
+          {appointmentsToday.map((item) => (
+            <View key={item.id} style={styles.appointmentItemDiv}>
+              <View style={styles.appointmentItemTextDiv}>
+                <Text>{item.hour}</Text>
+                <Text>|</Text>
+                <Text>{item.nomePaciente}</Text>
+              </View>
+              <TouchableOpacity>
+                <Entypo name="dots-three-vertical" size={12} color="black" />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <View style={styles.appointmentDivFooter}>
+          <TouchableOpacity
+            onPress={() => {
+              console.log("oxe");
+            }}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 12 }}>
+              + Novo agendamento
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View> */}
+      {/* <View style={styles.divider} />
+      <View style={styles.patientsDiv}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 8,
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >
+              Total de pacientes
+            </Text>
+            <Text
+              style={{
+                fontSize: 40,
+                fontWeight: "bold",
+              }}
+            >
+              {totalPatients}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              gap: 8,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text>Em avaliação</Text>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                {patientsInEvaluation}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text>Em acompanhamento</Text>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                {patientsInTreatment}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text>Concluídos</Text>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                {patientsConcluded}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.patientsDivFooter}>
+          <TouchableOpacity
+            onPress={() => {
+              console.log("oxe");
+            }}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 12 }}>
+              + Cadastrar paciente
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View> */}
+
+      
+
+//css
+  appointmentDiv: {
+    marginTop: 34,
+    paddingHorizontal: 24,
+  },
+  appointmentDivHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  appointmentDivBody: {
+    marginTop: 16,
+  },
+  appointmentDivFooter: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 16,
+    width: "100%",
+  },
+  secondarySubtitle: {
+    fontSize: 16,
+    fontWeight: 800,
+    color: "#9A9A9A",
+  },
+  appointmentItemDiv: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    width: "100%",
+    backgroundColor: "#F8F9FE",
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  patientsDiv: {
+    marginTop: 16,
+    paddingHorizontal: 24,
+  },
+  patientsDivFooter: {
+    marginTop: 16,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    width: "100%",
+  },

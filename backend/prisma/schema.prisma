@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Paciente {
+  cpf_fono         String
+  nome             String
+  cpf              String @id
+  feedback         String @default("")
+  dia_consulta     Int?
+  status           String @default("emAvaliacao")
+  horario_consulta String?
+  avatar_url       String?
+  duvidas          Duvidas[]
+  exerciciosRealizados ExerciciosRealizados[]
+  exercicios       Exercicios[]
+}
+
+model Duvidas {
+  id          Int    @id @default(autoincrement())
+  cpf_paciente String
+  data_hora   String
+  mensagem    String
+  lida        Boolean @default(false)
+  paciente    Paciente @relation(fields: [cpf_paciente], references: [cpf])
+}
+
+model ExerciciosRealizados {
+  id             Int    @id @default(autoincrement())
+  id_exercicio   Int
+  nome_exercicio String
+  duracao_video  Float
+  data           String
+  execucao       String
+  nota_execucao  Float
+  cpf_paciente   String
+  paciente       Paciente @relation(fields: [cpf_paciente], references: [cpf])
+}
+
+model Fono {
+  cpf  String @id
+  nome String
+  exercicios Exercicios[]
+}
+
+model Exercicios {
+  id               Int    @id @default(autoincrement())
+  nome_exercicio   String
+  repeticoes       Int
+  texto_descritivo String
+  video_exemplo    String?
+  cpf_fono         String
+  cpf_paciente     String
+  data_execucao    DateTime
+  fono             Fono @relation(fields: [cpf_fono], references: [cpf], onDelete: Cascade)
+  paciente         Paciente @relation(fields: [cpf_paciente], references: [cpf], onDelete: Cascade)
+}
