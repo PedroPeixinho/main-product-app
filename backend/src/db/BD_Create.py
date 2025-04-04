@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS paciente (
     cpf_fono TEXT NOT NULL,
     nome TEXT NOT NULL,
     cpf TEXT PRIMARY KEY,
-    feedback TEXT NOT NULL DEFAULT ''
+    feedback TEXT NOT NULL DEFAULT '',
+    nome_usuario TEXT NOT NULL,
+    senha TEXT NOT NULL
 )
 """)
 
@@ -36,7 +38,10 @@ CREATE TABLE IF NOT EXISTS exercicios_realizados (
 cursor.execute("""
 CREATE TABLE fono (
     cpf VARCHAR(14) PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL
+    nome VARCHAR(255) NOT NULL,
+    crfa VARCHAR(32) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha VARCHAR(64) NOT NULL
 )
 """)  
 

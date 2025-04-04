@@ -5,11 +5,18 @@ import os
 connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 
+
+# Inserir um fono
+cursor.execute("""
+INSERT OR IGNORE INTO fono (cpf, nome, crfa, email, senha)
+VALUES ('11223344500', 'Jose Oliveira', 'CRFa 4-12345', 'joseoliv@gmail.com', '123456')
+""")
+
 # Inserir um paciente
 cpf_paciente = "12345678900"
 cursor.execute("""
-INSERT OR IGNORE INTO paciente (cpf_fono, nome, cpf)
-VALUES ('98765432100', 'Miguel Oliveira', ?)
+INSERT OR IGNORE INTO paciente (cpf_fono, nome, cpf, nome_usuario, senha)
+VALUES ('98765432100', 'Miguel Oliveira', ?, 'miguel', '123456')
 """, (cpf_paciente,))
 
 # Inserir dois exercícios realizados pelo paciente
