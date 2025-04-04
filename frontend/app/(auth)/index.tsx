@@ -1,68 +1,56 @@
-import React, { useState } from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
   TouchableOpacity,
+  Image,
+  StyleSheet
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { isAuthenticated, getUserDetails } from '../../services/auth';
 
-export default function LoginScreen() {
+export default function WelcomeScreen() {
   const router = useRouter();
-  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const auth = await isAuthenticated();
+        if (!auth) return;
+  
+        const userDetails = await getUserDetails();
+        if (userDetails?.is_fono) {
+          router.push('../(tabs)/home');
+        } else {
+          router.push('../(tabs)/home2');
+        }
+      } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+      }
+    };
+  
+    checkAuth();
+  }, [router]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>FONINHO</Text>
-      <Text style={styles.subtitle}>Profissional</Text>
+      {/* Logo */}
+      <Image source={require('../../assets/images/Logo final.png')} style={styles.logo} />
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+      {/* Bem-vindo Text */}
+      <Text style={styles.subtitle}>Bem-vindo!</Text>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#aaa"
-          secureTextEntry={!passwordVisible}
-        />
-        <TouchableOpacity
-          style={styles.eyeIcon}
-          onPress={() => setPasswordVisible(!passwordVisible)}
-        >
-          <Ionicons
-            name={passwordVisible ? 'eye' : 'eye-off'}
-            size={20}
-            color="#888"
-          />
-        </TouchableOpacity>
-      </View>
+      {/* Pergunta */}
+      <Text style={styles.question}>Quem é você?</Text>
 
-      <TouchableOpacity
-        style={{
-          marginBottom: 20,
-        }}
-      >
-        <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
+      {/* Buttons */}
+      <TouchableOpacity style={[styles.button, styles.blueButton]} onPress={() => router.push('../patient_login')}>
+        <Text style={styles.blueButtonText}>Paciente ou responsável</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => router.push('../(tabs)/home')}
-      >
-        <Text style={styles.loginButtonText}>Login</Text>
+      <TouchableOpacity style={[styles.button, styles.pinkButton]} onPress={() => router.push('../fono_login')}>
+        <Text style={styles.pinkButtonText}>Fonoaudiólogo</Text>
       </TouchableOpacity>
-
-      <Text style={styles.registerText}>
-        Não tem uma conta? <Text style={styles.registerLink}>Cadastre-se</Text>
-      </Text>
     </View>
   );
 }
@@ -70,61 +58,53 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F8F8F8',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
   logo: {
-    fontSize: 54,
-    marginBottom: 5,
-    fontFamily: 'MontserratAlternates_800ExtraBold',
+    width: 300,
+    height: 180,
+    resizeMode: 'contain',
+    marginBottom: 10,
   },
   subtitle: {
-    fontSize: 20,
-    marginBottom: 30,
-    fontFamily: 'PlusJakartaSans_700Bold',
+    fontSize: 18,
+    fontFamily: 'PlusJakartaSans_600Bold',
+    color: '#FF9096',
+    marginBottom: 20,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '80%',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#ddd',
+  question: {
+    fontSize: 18,
+    fontFamily: 'PlusJakartaSans_600Bold',
+    color: '#006FFD',
+    marginBottom: 10,
   },
-  input: {
-    flex: 1,
-    height: 50,
-    color: '#333',
-  },
-  eyeIcon: {
-    padding: 10,
-  },
-  forgotPassword: {
-    color: '#007BFF',
-    fontSize: 14,
-  },
-  loginButton: {
-    backgroundColor: '#007BFF',
-    width: '80%',
+  button: {
+    width: '85%',
     paddingVertical: 15,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 3,
   },
-  loginButtonText: {
-    color: '#FFF',
+  blueButton: {
+    backgroundColor: '#006FFD',
+  },
+  pinkButton: {
+    backgroundColor: '#FF9096',
+  },
+  blueButtonText: {
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'PlusJakartaSans_600Bold',
   },
-  registerText: {
-    marginTop: 20,
-    fontSize: 14,
-    color: '#555',
-  },
-  registerLink: {
-    color: '#007BFF',
-    fontWeight: 'bold',
+  pinkButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'PlusJakartaSans_600Bold',
   },
 });
