@@ -1,0 +1,77 @@
+//useStates
+  const [selectedStatus, setSelectedStatus] = useState<string>("todos");
+
+
+// html
+
+{/* <ScrollView
+          <View style={styles.floatingActionButton}>
+        <FloatingAction
+          onPress={() => {
+            router.navigate("../patientProfile/patientProfile");
+          }}
+        />
+      </View>
+
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ flexDirection: "row" }}
+            >
+              {["todos", "emAcompanhamento", "emAvaliacao", "concluido"].map(
+                (status) => (
+                  <TouchableOpacity
+                    key={status}
+                    style={{
+                      marginRight: 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        padding: 8,
+                        borderRadius: 16,
+                        backgroundColor:
+                          selectedStatus === status ? "#006FFD" : "#EAF2FF",
+                        color: selectedStatus === status ? "#fff" : "#006FFD",
+                        fontWeight: "bold",
+                        marginTop: 16,
+                      }}
+                      onPress={() => {
+                        setSearchNomePaciente("");
+                        setSelectedStatus(status);
+                        setFilteredPatients(
+                          status === "todos"
+                            ? patients
+                            : patients.filter(
+                                (patient) => patient.status === status
+                              )
+                        );
+                      }}
+                    >
+                      {status === "todos"
+                        ? "Todos"
+                        : status === "emAcompanhamento"
+                          ? "Em acompanhamento"
+                          : status === "emAvaliacao"
+                            ? "Em avaliação"
+                            : "Concluídos"}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              )}
+            </ScrollView> */}
+
+          <View style={styles.divider} />
+
+
+
+// style
+  filters: {
+    flexDirection: "row",
+    marginTop: 16,
+  },
+  floatingActionButton: {
+    position: "absolute",
+    right: 56,
+    bottom: 56,
+    zIndex: 1,
+  },

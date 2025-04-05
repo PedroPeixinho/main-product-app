@@ -10,7 +10,11 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Inter_900Black } from "@expo-google-fonts/inter";
 import { MontserratAlternates_800ExtraBold } from "@expo-google-fonts/montserrat-alternates";
-import { PlusJakartaSans_700Bold } from "@expo-google-fonts/plus-jakarta-sans";
+import {
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_400Regular,
+} from "@expo-google-fonts/plus-jakarta-sans";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -25,6 +29,8 @@ export default function RootLayout() {
     MontserratAlternates_800ExtraBold,
     Inter_900Black,
     PlusJakartaSans_700Bold,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_400Regular,
   });
 
   useEffect(() => {
@@ -38,10 +44,10 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen
-          name="(auth)/index.tsx"
+          name="(auth)"
           options={{ headerShown: false }}
         />
         <Stack.Screen name="exercisesFono/adicionarExercicio" options={{ title: "Exercícios" }} />
