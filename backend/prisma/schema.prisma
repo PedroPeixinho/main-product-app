@@ -23,6 +23,8 @@ model Paciente {
   duvidas          Duvidas[]
   exerciciosRealizados ExerciciosRealizados[]
   exercicios       Exercicios[]
+  email String @unique 
+  senha String 
 }
 
 model Duvidas {
@@ -50,6 +52,9 @@ model Fono {
   cpf  String @id
   nome String
   exercicios Exercicios[]
+  crfa  String  
+  email String @unique 
+  senha String 
 }
 
 model Exercicios {

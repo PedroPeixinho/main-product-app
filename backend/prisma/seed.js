@@ -26,6 +26,8 @@ async function main() {
       status: status,
       horario_consulta: horarioConsulta,
       avatar_url: avatarUrl,
+      email: "miguel@gmail.com",
+      senha: "123456"
     },
   });
 
@@ -50,6 +52,8 @@ async function main() {
       status: "emAcompanhamento",
       horario_consulta: "09:00",
       avatar_url: "",
+      email: "joao@gmail.com",
+      senha: "123456"
     },
     {
       cpf: "22222222222",
@@ -58,6 +62,8 @@ async function main() {
       status: "emAvaliacao",
       horario_consulta: "10:30",
       avatar_url: "",
+      email: "maria@gmail.com",
+      senha: "123456"
     },
     {
       cpf: "33333333333",
@@ -66,6 +72,8 @@ async function main() {
       status: "concluido",
       horario_consulta: "11:45",
       avatar_url: "",
+      email: "carlos@gmail.com",
+      senha: "123456"
     },
     {
       cpf: "44444444444",
@@ -74,6 +82,8 @@ async function main() {
       status: "emAcompanhamento",
       horario_consulta: "13:15",
       avatar_url: "",
+      email: "ana@gmail.com",
+      senha: "123456"
     },
     {
       cpf: "55555555555",
@@ -82,6 +92,8 @@ async function main() {
       status: "emAvaliacao",
       horario_consulta: "15:00",
       avatar_url: "",
+      email: "pedro@gmail.com",
+      senha: "123456"
     },
   ];
 
@@ -93,6 +105,8 @@ async function main() {
         status: paciente.status,
         horario_consulta: paciente.horario_consulta,
         avatar_url: paciente.avatar_url,
+        email: paciente.email,
+        senha: paciente.senha
       },
       create: {
         cpf_fono: "98765432100",
@@ -102,8 +116,51 @@ async function main() {
         status: paciente.status,
         horario_consulta: paciente.horario_consulta,
         avatar_url: paciente.avatar_url,
+        email: paciente.email,
+        senha: paciente.senha
       },
     });
+
+    const fonos = [
+      {
+        cpf: "98765432100",
+        nome: "Julia Santos",
+        crfa: "CRFa 4-4258",
+        email: "julia@gmail.com",
+        senha: "123456"
+      },
+      {
+        cpf: "98765432101",
+        nome: "Ana Almeida",
+        crfa: "CRFa 4-4258",
+        email: "ana@gmail.com",
+        senha: "123456"
+      },
+      {
+        cpf: "98765432102",
+        nome: "Pedro Oliveira",
+        crfa: "CRFa 4-4258",
+        email: "pedro@gmail.com",
+        senha: "123456"
+      }
+    ]
+  
+    for (const fono of fonos) {
+      await prisma.fono.upsert({
+        where: { cpf: fono.cpf },
+        update: {
+          email: fono.email,
+          senha: fono.senha
+        },
+        create: {
+          cpf: fono.cpf,
+          nome: fono.nome,
+          crfa: fono.crfa,
+          email: fono.email,
+          senha: fono.senha
+        },
+      });
+    }
 
     const duvidas = [
       {

@@ -47,6 +47,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="logout"
+        options={{
+          title: "Logout",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="people" size={24} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
