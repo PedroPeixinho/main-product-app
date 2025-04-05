@@ -2,15 +2,18 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const WideButton = ({ text, onPress }: any) => {
+const WideButton = ({ text, onPress, variant }: any) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <MaterialCommunityIcons
-        name="plus-thick"
-        size={18}
-        color="white"
-        style={styles.icon}
-      />
+      {variant === "noIcon" ? null : (
+        <MaterialCommunityIcons
+          name="plus-thick"
+          size={18}
+          color="white"
+          style={styles.icon}
+        />
+      )}
+
       <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
@@ -29,8 +32,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontSize: 12,
-    fontFamily: "PlusJakartaSans_600SemiBold",
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
   },
   icon: {
     marginRight: 8,

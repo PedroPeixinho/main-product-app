@@ -10,10 +10,13 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Inter_900Black } from "@expo-google-fonts/inter";
 import { MontserratAlternates_800ExtraBold } from "@expo-google-fonts/montserrat-alternates";
+import { Inter_600SemiBold } from "@expo-google-fonts/inter";
 import {
   PlusJakartaSans_700Bold,
   PlusJakartaSans_600SemiBold,
   PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_800ExtraBold,
 } from "@expo-google-fonts/plus-jakarta-sans";
 import "react-native-reanimated";
 
@@ -31,6 +34,9 @@ export default function RootLayout() {
     PlusJakartaSans_700Bold,
     PlusJakartaSans_600SemiBold,
     PlusJakartaSans_400Regular,
+    Inter_600SemiBold,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_800ExtraBold,
   });
 
   useEffect(() => {
@@ -46,10 +52,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="(auth)"
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
