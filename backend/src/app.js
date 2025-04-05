@@ -14,6 +14,9 @@ app.use("/pacientes", pacienteRoutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
+const videoRoutes = require("./routes/video.routes");
+app.use("/record", videoRoutes);
+
 app.listen(3000, () => {
   console.log("Server is listening on port 3000");
 });
