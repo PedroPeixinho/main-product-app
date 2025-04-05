@@ -3,50 +3,52 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { WebView } from 'react-native-webview';
+import { useEffect, useState } from 'react';
+
+import { ButtonApp } from '@/components/ButtonApp';
 
 export default function ExerciseCompletedScreen() {
+  const [date, setDate] = useState(new Date());
+  const [duration, setDuration] = useState('');
+  const [status, setStatus] = useState('');
+  const [video, setVideo] = useState('');
+  const [nameExecution, setNameExecution] = useState('');
+
+
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons name="arrow-back-ios" size={24} color="#006FFD" />
-          </TouchableOpacity>
-        </View>
+      <Image style={styles.emoji} source={require('@/assets/images/smile_face.png')} />
+
+      <Text style={styles.title}>Exercício concluído!</Text>
+      <Text style={styles.subtitle}>Lateralização</Text>
+      <Text style={styles.date}>11/02/2025 - 10h25</Text>
         
-        <Image style={styles.emoji} source={require('/home/ubuntu/Área de trabalho/projetao/main-product-app/frontend/assets/images/smile_face.png')} />
-        <Text style={styles.title}>Exercício concluído!</Text>
-        <Text style={styles.subtitle}>Lateralização</Text>
-        <Text style={styles.date}>11/02/2025 - 10h25</Text>
-          
-        <Image
-          style={styles.image}
-          source={{ uri: 'https://example.com/image.png' }}
+      <Image
+        style={styles.image}
+        source={{ uri: 'https://example.com/image.png' }}
+      />
+
+      {/* Espaço para o vídeo enviado pelo usuário */}
+      <View style={styles.videoContainer}>
+        <WebView
+          style={{ width: '100%', height: '100%' }}
+          source={{ uri: 'https://www.youtube.com/shorts/M3EMmRTLsb8' }}
         />
+      </View>
 
-        {/* Espaço para o vídeo enviado pelo usuário */}
-        <View style={styles.videoContainer}>
-          <WebView
-            style={{ width: '100%', height: '100%' }}
-            source={{ uri: 'https://www.youtube.com/shorts/M3EMmRTLsb8' }}
-          />
-        </View>
-
-        <View style={styles.statusContainer}>
+      <View style={styles.statusContainer}>
+        <View style={styles.statusDuration}>
+          <Image style={styles.relogio} source={require('@/assets/images/icon_relogio.png')} />
           <Text style={styles.statusText}>1min35s</Text>
-          <Text style={styles.statusBadge}>PARCIALMENTE CORRETO</Text>
         </View>
-        
-        <TouchableOpacity style={styles.nextButton}>
-          <Text style={styles.nextButtonText}>Próximo exercício</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.repeatButton}>
-          <Text style={styles.repeatButtonText}>Repetir</Text>
-        </TouchableOpacity>
-      </ScrollView>
+        <Text style={styles.statusBadge}>PARCIALMENTE CORRETO</Text>
+      </View>
+
+      <ButtonApp title="Proximo exercício" onPress={() => router.push('../(tabs)/home')} color='blue' />
+      <ButtonApp title="Repetir" onPress={() => router.push('../(tabs)/home')} color='pink' />
+
     </View>
   );
 }
@@ -54,18 +56,13 @@ export default function ExerciseCompletedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  scrollContent: {
-    flexGrow: 1,
-    alignItems: 'center',
-    padding: 20,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: 24,
@@ -78,20 +75,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: 'bold',
+    fontFamily: 'PlusJakartaSans_700Bold',
     color: '#006FFD',
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '600',
     marginTop: 5,
+    fontFamily: 'PlusJakartaSans_600SemiBold',
     textAlign: 'center',
   },
   date: {
-    fontSize: 14,
+    fontSize: 12,
+    marginTop: 5,
     color: '#50525A',
+    fontFamily: 'PlusJakartaSans_600SemiBold',
     marginBottom: 10,
     textAlign: 'center',
   },
@@ -113,17 +114,31 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    width: '85%',
+    marginBottom: 50,
+  },
+  statusDuration:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2
   },
   statusText: {
     fontSize: 16,
     color: '#006FFD',
+    fontFamily: 'PlusJakartaSans_600SemiBold',
+  },
+  relogio:{
+    width: 18,
+    resizeMode: 'contain',
+    fontFamily: 'PlusJakartaSans_600SemiBold'
   },
   statusBadge: {
     backgroundColor: '#FFC107',
     color: '#fff',
+    fontFamily: 'PlusJakartaSans_600SemiBold',
     paddingVertical: 5,
+    fontSize: 12,
     paddingHorizontal: 10,
     borderRadius: 10,
     marginLeft: 10,
