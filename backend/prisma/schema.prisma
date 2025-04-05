@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "../generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -12,32 +12,33 @@ datasource db {
 }
 
 model Paciente {
-  cpf_fono         String
-  nome             String
-  cpf              String @id
-  feedback         String @default("")
-  dia_consulta     Int?
-  status           String @default("emAvaliacao")
-  horario_consulta String?
-  avatar_url       String?
-  duvidas          Duvidas[]
+  cpf_fono             String
+  nome                 String
+  cpf                  String                 @id
+  feedback             String                 @default("")
+  dia_consulta         Int?
+  status               String                 @default("emAvaliacao")
+  horario_consulta     String?
+  avatar_url           String?
+  duvidas              Duvidas[]
   exerciciosRealizados ExerciciosRealizados[]
-  exercicios       Exercicios[]
-  email String @unique 
-  senha String 
+  exercicios           Exercicios[]
+  email                String                 @unique
+  senha                String
+  Gravacoes            Gravacoes[]
 }
 
 model Duvidas {
-  id          Int    @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   cpf_paciente String
-  data_hora   String
-  mensagem    String
-  lida        Boolean @default(false)
-  paciente    Paciente @relation(fields: [cpf_paciente], references: [cpf])
+  data_hora    String
+  mensagem     String
+  lida         Boolean  @default(false)
+  paciente     Paciente @relation(fields: [cpf_paciente], references: [cpf])
 }
 
 model ExerciciosRealizados {
-  id             Int    @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   id_exercicio   Int
   nome_exercicio String
   duracao_video  Float
@@ -49,16 +50,16 @@ model ExerciciosRealizados {
 }
 
 model Fono {
-  cpf  String @id
-  nome String
+  cpf        String       @id
+  nome       String
   exercicios Exercicios[]
-  crfa  String  
-  email String @unique 
-  senha String 
+  crfa       String
+  email      String       @unique
+  senha      String
 }
 
 model Exercicios {
-  id               Int    @id @default(autoincrement())
+  id               Int         @id @default(autoincrement())
   nome_exercicio   String
   repeticoes       Int
   texto_descritivo String
@@ -66,6 +67,17 @@ model Exercicios {
   cpf_fono         String
   cpf_paciente     String
   data_execucao    DateTime
-  fono             Fono @relation(fields: [cpf_fono], references: [cpf], onDelete: Cascade)
-  paciente         Paciente @relation(fields: [cpf_paciente], references: [cpf], onDelete: Cascade)
+  fono             Fono        @relation(fields: [cpf_fono], references: [cpf], onDelete: Cascade)
+  paciente         Paciente    @relation(fields: [cpf_paciente], references: [cpf], onDelete: Cascade)
+  Gravacoes        Gravacoes[]
+}
+
+model Gravacoes {
+  id              Int    @id @default(autoincrement())
+  id_exercicio    Int
+  caminho_arquivo String
+  cpf_paciente    String
+
+  paciente  Paciente   @relation(fields: [cpf_paciente], references: [cpf], onDelete: Cascade)
+  exercicio Exercicios @relation(fields: [id_exercicio], references: [id], onDelete: Cascade)
 }
