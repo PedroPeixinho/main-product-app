@@ -68,7 +68,7 @@ export default function Lateralizar() {
             }
 
             Alert.alert("Sucesso", "O exercício foi salvo!");
-            router.push("/patientProfile/teste");
+            router.push("/patientProfile/patientProfile");
 
         } catch (error) {
             console.error(error);

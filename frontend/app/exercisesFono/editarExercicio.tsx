@@ -102,7 +102,7 @@ export default function Lateralizar() {
             Alert.alert("Erro", "Não foi possível atualizar o exercício");
         } finally {
             setIsLoading(false);
-            router.push("/patientProfile/teste");
+            router.push("/patientProfile/patientProfile");
         }
     };
 
