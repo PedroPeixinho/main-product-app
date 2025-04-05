@@ -1,9 +1,13 @@
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { PacienteService } from "@/services/pacientes";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import WideButton from "@/components/wideButton";
+import StatusFeito from "../../assets/images/statusFeito.svg";
+import StatusMedia from "../../assets/images/statusMedia.svg";
+import StatusNaoFeito from "../../assets/images/statusNaoFeito.svg";
+import StatusReprovado from "../../assets/images/statusReprovado.svg";
 
 interface Question {
   avatarUrl?: string;
@@ -52,45 +56,15 @@ export default function HomePaciente() {
           {day}
         </Text>
         {index == 0 || index == 3 || index == 4 || index == 5 ? (
-          <Image
-            style={{
-              width: 24,
-              height: 24,
-            }}
-            source={require(`../../assets/images/statusFeito.svg`)}
-          />
+          <StatusFeito width={24} height={24} />
         ) : index == 1 ? (
-          <Image
-            style={{
-              width: 24,
-              height: 24,
-            }}
-            source={require(`../../assets/images/statusReprovado.svg`)}
-          />
+          <StatusReprovado width={24} height={24} />
         ) : index == 2 ? (
-          <Image
-            style={{
-              width: 24,
-              height: 24,
-            }}
-            source={require(`../../assets/images/statusMedia.svg`)}
-          />
+          <StatusMedia width={24} height={24} />
         ) : isDone ? (
-          <Image
-            style={{
-              width: 24,
-              height: 24,
-            }}
-            source={require(`../../assets/images/statusFeito.svg`)}
-          />
+          <StatusFeito width={24} height={24} />
         ) : (
-          <Image
-            style={{
-              width: 24,
-              height: 24,
-            }}
-            source={require(`../../assets/images/statusNaoFeito.svg`)}
-          />
+          <StatusNaoFeito width={24} height={24} />
         )}
       </View>
     ));
