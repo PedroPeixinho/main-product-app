@@ -1,5 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import {
   CameraMode,
   CameraType,
@@ -19,6 +26,7 @@ interface UserDetails {
 
 export default function RecordScreen() {
   const router = useRouter();
+  const [waiting, setWaiting] = useState(false);
   const [microphone, requestMicrophone] = useMicrophonePermissions();
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
@@ -84,7 +92,9 @@ export default function RecordScreen() {
       console.log("Gravação concluida...");
       clearInterval(timer);
       if (videoRecord) {
+        setWaiting(true);
         const result = await uploadVideoService(cpf, exercicioId, videoRecord);
+        setWaiting(false);
         if (result) {
           console.log("Vídeo enviado com sucesso!");
           //router.push('./exer');
@@ -119,70 +129,100 @@ export default function RecordScreen() {
 
   return (
     <View style={styles.container}>
-      <CameraView
-        animateShutter={true}
-        active={true}
-        style={styles.camera}
-        ref={ref}
-        mode="video"
-        facing="front"
-        mute={false}
-      >
-        <Svg
-          style={styles.faceOutline}
-          height="380"
-          width="290"
-          viewBox="0 0 290 380"
+      {waiting ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <Ellipse
-            cx="145"
-            cy="190"
-            rx="125"
-            ry="180"
-            stroke="white"
-            strokeWidth="4"
-            strokeDasharray="10 10"
-            fill="none"
-          />
-        </Svg>
+          <Text
+            style={{
+              fontFamily: "PlusJakartaSans_700Bold",
+              fontSize: 28,
+              color: "#006FFD",
+            }}
+          >
+            Aguarde um pouco
+          </Text>
+          <Text
+            style={{
+              fontFamily: "PlusJakartaSans_700Bold",
+              fontSize: 20,
+              marginBottom: 70,
+            }}
+          >
+            Estamos analisando seu vídeo
+          </Text>
+          <ActivityIndicator size={140} color={"#FF9096"} />
+        </View>
+      ) : (
+        <CameraView
+          animateShutter={true}
+          active={true}
+          style={styles.camera}
+          ref={ref}
+          mode="video"
+          facing="front"
+          mute={false}
+        >
+          <Svg
+            style={styles.faceOutline}
+            height="380"
+            width="290"
+            viewBox="0 0 290 380"
+          >
+            <Ellipse
+              cx="145"
+              cy="190"
+              rx="125"
+              ry="180"
+              stroke="white"
+              strokeWidth="4"
+              strokeDasharray="10 10"
+              fill="none"
+            />
+          </Svg>
 
-        {recording && (
-          <View style={styles.timerContainer}>
-            <View style={styles.dot} />
-            <Text style={styles.timerText}>{formatTime(time)}</Text>
-          </View>
-        )}
-
-        <Text style={styles.instructionText}>{instructionText}</Text>
-
-        <View style={styles.controlsContainer}>
-          {recording ? (
-            <Pressable style={styles.finishButton} onPress={stopRecording}>
-              <View style={styles.finishButtonContent}>
-                <Icon name="check" size={24} color="white" />
-                <Text style={styles.finishButtonText}> Concluir</Text>
-              </View>
-            </Pressable>
-          ) : (
-            <Pressable style={styles.startButton} onPress={startRecording}>
-              <View style={styles.startButtonContent}>
-                <View style={styles.whiteDot} />
-                <Text style={styles.startButtonText}>Iniciar gravação</Text>
-              </View>
-            </Pressable>
+          {recording && (
+            <View style={styles.timerContainer}>
+              <View style={styles.dot} />
+              <Text style={styles.timerText}>{formatTime(time)}</Text>
+            </View>
           )}
 
-          <Pressable
-            onPress={() => {
-              if (recording) stopRecording();
-              router.back();
-            }}
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>Voltar</Text>
-          </Pressable>
-        </View>
-      </CameraView>
+          <Text style={styles.instructionText}>{instructionText}</Text>
+
+          <View style={styles.controlsContainer}>
+            {recording ? (
+              <Pressable style={styles.finishButton} onPress={stopRecording}>
+                <View style={styles.finishButtonContent}>
+                  <Icon name="check" size={24} color="white" />
+                  <Text style={styles.finishButtonText}> Concluir</Text>
+                </View>
+              </Pressable>
+            ) : (
+              <Pressable style={styles.startButton} onPress={startRecording}>
+                <View style={styles.startButtonContent}>
+                  <View style={styles.whiteDot} />
+                  <Text style={styles.startButtonText}>Iniciar gravação</Text>
+                </View>
+              </Pressable>
+            )}
+
+            <Pressable
+              onPress={() => {
+                if (recording) stopRecording();
+                router.back();
+              }}
+              style={styles.backButton}
+            >
+              <Text style={styles.backButtonText}>Voltar</Text>
+            </Pressable>
+          </View>
+        </CameraView>
+      )}
     </View>
   );
 }
