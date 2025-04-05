@@ -30,7 +30,7 @@ export default async function uploadVideoService(
     try {
         // const token = await AsyncStorage.getItem("token");
         // if (!token) return null;
-
+        console.log('Enviando vídeo...');
         const endpoint = `${process.env.EXPO_PUBLIC_API_URL}/record/patient/${cpf}/exercicies/${id_exercicio}/video`;
         // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         api.defaults.headers.common['Content-Type'] = 'multipart/form-data';

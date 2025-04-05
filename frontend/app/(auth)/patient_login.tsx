@@ -42,7 +42,10 @@ export default function PatientLoginScreen() {
       }
   
       await AsyncStorage.setItem("token", data.token);
-      router.push('../(tabs)/home');    //MUDAR ROTA
+      router.push({
+        pathname: '/record',
+        params: { id_exercicio: 1 },
+      });    //MUDAR ROTA
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);

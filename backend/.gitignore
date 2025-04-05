@@ -13,6 +13,8 @@ node_modules/
 # Optional npm cache directory
 .npm
 
+.mp4
+
 # TypeScript cache
 *.tsbuildinfo
 

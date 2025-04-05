@@ -4,6 +4,7 @@ import {
   CameraMode,
   CameraType,
   CameraView,
+  useMicrophonePermissions,
   useCameraPermissions,
 } from 'expo-camera';
 import Svg, { Ellipse } from 'react-native-svg';
@@ -18,6 +19,7 @@ interface UserDetails {
 
 export default function RecordScreen() {
   const router = useRouter();
+  const [microphone, requestMicrophone] = useMicrophonePermissions();
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const [recording, setRecording] = useState(false);
@@ -50,7 +52,9 @@ export default function RecordScreen() {
 
   if (!permission) return null;
 
-  if (!permission.granted) {
+  if (!microphone) return null;
+  
+  if (!permission.granted || !microphone.granted) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>
@@ -59,36 +63,48 @@ export default function RecordScreen() {
         <Pressable style={styles.permissionButton} onPress={requestPermission}>
           <Text style={styles.permissionButtonText}>Conceder Permissão</Text>
         </Pressable>
+        <Pressable style={styles.permissionButton} onPress={requestMicrophone}>
+          <Text style={styles.permissionButtonText}>Permitir Microfone</Text>
+        </Pressable>
       </View>
     );
   }
 
   const startRecording = async () => {
-    setRecording(true);
-    setTime(0);
-    setInstructionText('Realize o exercício');
-
-    timer = setInterval(() => {
-      setTime((prev) => prev + 1);
-    }, 1000);
-
-    const videoRecord = await ref.current?.recordAsync();
-    clearInterval(timer);
-
-    if (videoRecord) {
-      const result = await uploadVideoService(cpf, exercicioId, videoRecord);
-      if (result) {
-        console.log('Vídeo enviado com sucesso!');
-        // TODO: redirecionar
-      } else {
-        console.error('Falha ao enviar o vídeo.');
+    try{
+      setRecording(true);
+      setTime(0);
+      setInstructionText('Realize o exercício');
+      
+      timer = setInterval(() => {
+        setTime((prev) => prev + 1);
+      }, 1000);
+      console.log('Iniciando gravação...');
+      const videoRecord = await ref.current?.recordAsync();
+      console.log('Gravação concluida...');
+      clearInterval(timer);
+      if (videoRecord) {
+        const result = await uploadVideoService(cpf, exercicioId, videoRecord);
+        if (result) {
+          console.log('Vídeo enviado com sucesso!');
+          //router.push('./exer');
+        } else {
+          console.error('Falha ao enviar o vídeo.');
+        }
       }
+    } catch (error) {
+      clearInterval(timer);
+      console.error('Erro ao gravar vídeo:', error);
+      setInstructionText('Erro ao iniciar a gravação.');
+      setRecording(false);
     }
   };
 
   const stopRecording = () => {
+    console.log('Parando gravação...');
     setRecording(false);
     ref.current?.stopRecording();
+    console.log('Gravação parada...');
     clearInterval(timer);
     setInstructionText('Mantenha o rosto na marcação indicada e comece a gravação');
   };

@@ -111,7 +111,7 @@ exports.registerPatient = async (req, res) => {
 
 exports.loginPatient = async (req, res) => {
   const { nome_usuario, senha } = req.body;
-  console.log(req.body);
+
   if (!nome_usuario || !senha) {
     return res.status(400).json({ error: "Nome de usuário e senha são obrigatórios." });
   }
@@ -140,7 +140,7 @@ exports.getPatientDetails = async (req, res) => {
         nome: true,
         cpf: true,
         feedback: true,
-        nome_usuario: true,
+        email: true,
       },
     });
     if (!paciente) return res.status(404).json({ error: "Paciente não encontrado." });
