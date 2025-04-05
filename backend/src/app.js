@@ -5,6 +5,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use("/videos", express.static("src/uploads/videos"));
+
 const router = require("./routes/progresso.routes");
 const pacienteRoutes = require("./routes/paciente.routes");
 // app.use("/progresso", router);

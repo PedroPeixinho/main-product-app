@@ -1,17 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import React, { useRef, useState, useEffect } from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import {
   CameraMode,
   CameraType,
   CameraView,
   useMicrophonePermissions,
   useCameraPermissions,
-} from 'expo-camera';
-import Svg, { Ellipse } from 'react-native-svg';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { getUserDetails, isAuthenticated } from '../../services/auth';
-import uploadVideoService from '../../services/video';
+} from "expo-camera";
+import Svg, { Ellipse } from "react-native-svg";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { getUserDetails, isAuthenticated } from "../../services/auth";
+import uploadVideoService from "../../services/video";
 
 interface UserDetails {
   cpf: string;
@@ -25,19 +25,19 @@ export default function RecordScreen() {
   const [recording, setRecording] = useState(false);
   const [time, setTime] = useState(0);
   const [instructionText, setInstructionText] = useState(
-    'Mantenha o rosto na marcação indicada e comece a gravação'
+    "Mantenha o rosto na marcação indicada e comece a gravação"
   );
-  const [userDetails, setUserDetails] = useState<UserDetails>({ cpf: '' });
+  const [userDetails, setUserDetails] = useState<UserDetails>({ cpf: "" });
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (await isAuthenticated()) {
         // Se o usuário estiver autenticado, busca os detalhes
         const details = await getUserDetails();
-        setUserDetails(details ?? { cpf: '1' });
+        setUserDetails(details ?? { cpf: "1" });
       } else {
         // Se não estiver autenticado, redireciona para a tela de login
-        router.push('../'); 
+        router.push("../");
       }
     };
     fetchUserDetails();
@@ -48,16 +48,16 @@ export default function RecordScreen() {
   const cpf = userDetails.cpf;
   // const id_exercicio = 1;
   const { id_exercicio } = useLocalSearchParams();
-  const exercicioId = Number(id_exercicio);  
+  const exercicioId = Number(id_exercicio);
 
   if (!permission) return null;
 
   if (!microphone) return null;
-  
+
   if (!permission.granted || !microphone.granted) {
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>
+        <Text style={{ textAlign: "center" }}>
           Precisamos da sua permissão para usar a câmera.
         </Text>
         <Pressable style={styles.permissionButton} onPress={requestPermission}>
@@ -71,48 +71,50 @@ export default function RecordScreen() {
   }
 
   const startRecording = async () => {
-    try{
+    try {
       setRecording(true);
       setTime(0);
-      setInstructionText('Realize o exercício');
-      
+      setInstructionText("Realize o exercício");
+
       timer = setInterval(() => {
         setTime((prev) => prev + 1);
       }, 1000);
-      console.log('Iniciando gravação...');
+      console.log("Iniciando gravação...");
       const videoRecord = await ref.current?.recordAsync();
-      console.log('Gravação concluida...');
+      console.log("Gravação concluida...");
       clearInterval(timer);
       if (videoRecord) {
         const result = await uploadVideoService(cpf, exercicioId, videoRecord);
         if (result) {
-          console.log('Vídeo enviado com sucesso!');
+          console.log("Vídeo enviado com sucesso!");
           //router.push('./exer');
         } else {
-          console.error('Falha ao enviar o vídeo.');
+          console.error("Falha ao enviar o vídeo.");
         }
       }
     } catch (error) {
       clearInterval(timer);
-      console.error('Erro ao gravar vídeo:', error);
-      setInstructionText('Erro ao iniciar a gravação.');
+      console.error("Erro ao gravar vídeo:", error);
+      setInstructionText("Erro ao iniciar a gravação.");
       setRecording(false);
     }
   };
 
   const stopRecording = () => {
-    console.log('Parando gravação...');
+    console.log("Parando gravação...");
     setRecording(false);
     ref.current?.stopRecording();
-    console.log('Gravação parada...');
+    console.log("Gravação parada...");
     clearInterval(timer);
-    setInstructionText('Mantenha o rosto na marcação indicada e comece a gravação');
+    setInstructionText(
+      "Mantenha o rosto na marcação indicada e comece a gravação"
+    );
   };
 
   const formatTime = (seconds: number) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
-    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    return `${min}:${sec < 10 ? "0" : ""}${sec}`;
   };
 
   return (
@@ -126,7 +128,12 @@ export default function RecordScreen() {
         facing="front"
         mute={false}
       >
-        <Svg style={styles.faceOutline} height="380" width="290" viewBox="0 0 290 380">
+        <Svg
+          style={styles.faceOutline}
+          height="380"
+          width="290"
+          viewBox="0 0 290 380"
+        >
           <Ellipse
             cx="145"
             cy="190"
@@ -183,121 +190,121 @@ export default function RecordScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   camera: {
     flex: 1,
-    width: '100%',
+    width: "100%",
   },
   faceOutline: {
-    position: 'absolute',
-    top: '25%',
-    alignSelf: 'center',
+    position: "absolute",
+    top: "25%",
+    alignSelf: "center",
   },
   controlsContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 30,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   timerContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 80,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignSelf: "center",
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   dot: {
     width: 10,
     height: 10,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     borderRadius: 5,
     marginRight: 5,
   },
   timerText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   instructionText: {
-    position: 'absolute',
+    position: "absolute",
     top: 120,
     left: 60,
     right: 60,
-    textAlign: 'center',
-    color: 'white',
+    textAlign: "center",
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   startButton: {
-    backgroundColor: '#006ffd',
+    backgroundColor: "#006ffd",
     width: 300,
     paddingVertical: 16,
     borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 15,
   },
   startButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   startButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   whiteDot: {
     width: 12,
     height: 12,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 6,
     marginRight: 10,
   },
   finishButton: {
-    backgroundColor: '#FF758C',
+    backgroundColor: "#FF758C",
     width: 300,
     paddingVertical: 16,
     borderRadius: 30,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 15,
   },
   finishButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   finishButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   backButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     width: 300,
     paddingVertical: 16,
     borderRadius: 30,
-    alignItems: 'center',
+    alignItems: "center",
   },
   backButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   permissionButton: {
     marginTop: 20,
-    backgroundColor: '#0066FF',
+    backgroundColor: "#0066FF",
     padding: 10,
     borderRadius: 5,
   },
   permissionButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
