@@ -26,7 +26,7 @@ exports.uploadVideo = async (req, res) => {
 
     const video = req.file;
     const videoPath = `/uploads/videos/${video.filename}`;
-    
+
     // Salva no banco
     await prisma.gravacoes.create({
       data: {
@@ -40,7 +40,7 @@ exports.uploadVideo = async (req, res) => {
 
     await sendToAvaliable(video, id_exercicio.toString());
 
-    res.status(200).json({ resultado: "correto", videoPath });
+    res.status(200).json({ resultado: "Correto", videoPath });
   } catch (err) {
     console.error("Erro ao salvar vídeo:", err);
     res.status(500).json({ error: "Erro ao salvar vídeo." });
@@ -51,12 +51,12 @@ async function sendToAvaliable(video, nome_exercicio) {
   try {
     const videoStream = fs.createReadStream(video.path);
     const formData = new FormData();
-    
+
     formData.append("nome_exercicio", nome_exercicio);
-    
+
     //Versao para um só pc
     formData.append("video", video.path);
-    
+
     //Versao para o dois pcs
     //formData.append("video", videoStream, video.filename);
 
