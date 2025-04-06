@@ -96,17 +96,24 @@ export default function RecordScreen() {
         setWaiting(false);
         if (result) {
           console.log("Vídeo enviado com sucesso!");
-          if (id_exercicio == "4") {
-            router.push({
-              pathname: "/exerFinalizados",
-              params: { id_exercicio, videoURL: 1, result: "Correto" },
-            }); //MUDAR ROTA
-          } else {
-            router.push({
-              pathname: "/exer",
-              params: { id_exercicio, videoURL: 1, result: "Correto" },
-            }); //MUDAR ROTA
-          }
+          console.log(
+            "nome video: ",
+            result.data.videoPath.split("/")[
+              result.data.videoPath.split("/").length - 1
+            ]
+          );
+          router.push({
+            pathname: "/exer",
+            params: {
+              id_exercicio,
+              videoURL: 1,
+              result: "Correto",
+              nomeVideo:
+                result.data.videoPath.split("/")[
+                  result.data.videoPath.split("/").length - 1
+                ],
+            },
+          });
         } else {
           console.error("Falha ao enviar o vídeo.");
         }

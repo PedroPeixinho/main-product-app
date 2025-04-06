@@ -8,7 +8,7 @@ import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ExerciseCompletedScreen() {
-  const { id_exercicio, videoURL, result } = useLocalSearchParams();
+  const { id_exercicio, videoURL, result, nomeVideo } = useLocalSearchParams();
   const [date, setDate] = useState(new Date());
   const [duration, setDuration] = useState("");
   const [status, setStatus] = useState("");
@@ -78,7 +78,7 @@ export default function ExerciseCompletedScreen() {
           <Video
             ref={videoRef}
             source={{
-              uri: `${process.env.EXPO_PUBLIC_API_URL}/videos/${videoURL}.mp4`,
+              uri: `${process.env.EXPO_PUBLIC_API_URL}/videos/${nomeVideo}`,
             }}
             style={styles.video}
             useNativeControls={false}
@@ -120,15 +120,27 @@ export default function ExerciseCompletedScreen() {
       </View>
 
       <ButtonApp
-        title="Proximo exercício"
+        title={id_exercicio == "4" ? "Finalizar" : "Proximo exercício"}
         onPress={() => {
-          router.push({
-            pathname: "../iniciarExercicio",
-            params: { id_exercicio: Number(id_exercicio) + 1 },
-          }); //MUDAR ROTA
+          if (id_exercicio == "4") {
+            router.push({
+              pathname: "/exerFinalizados",
+              params: {
+                id_exercicio,
+                videoURL: 1,
+                result: "Correto",
+              },
+            }); //MUDAR ROTA
+          } else {
+            router.push({
+              pathname: "../iniciarExercicio",
+              params: { id_exercicio: Number(id_exercicio) + 1 },
+            }); //MUDAR ROTA
+          }
         }}
         color="blue"
       />
+
       <ButtonApp
         title="Repetir"
         onPress={() => {
