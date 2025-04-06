@@ -65,6 +65,7 @@ export default function StartExercise() {
               style={styles.video}
               useNativeControls={false}
               resizeMode={ResizeMode.CONTAIN}
+              isLooping={true}
               onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
             />
             {videoStatus?.isLoaded && !videoStatus.isPlaying && (

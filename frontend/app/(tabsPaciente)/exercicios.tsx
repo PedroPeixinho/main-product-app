@@ -295,7 +295,10 @@ export default function Exercicios() {
         <WideButton
           text="Vamos Praticar?"
           onPress={() => {
-            router.push("../iniciarExercicio");
+            router.push({
+              pathname: "../iniciarExercicio",
+              params: { id_exercicio: 1 },
+            }); //MUDAR ROTA
           }}
           variant="noIcon"
         />
