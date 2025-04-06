@@ -156,7 +156,7 @@ export default function Exercicios() {
               marginTop: 24,
               flexDirection: "row",
               justifyContent: "space-between",
-              marginHorizontal: 30,
+              marginHorizontal: 24,
             }}
           >
             {renderDaysOfWeek(today)}
@@ -262,6 +262,104 @@ export default function Exercicios() {
                   }}
                 >
                   Protruir e retrair
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#006FFD",
+                  borderRadius: 45,
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "PlusJakartaSans_600SemiBold",
+                    color: "#FFFFFF",
+                    fontSize: 10,
+                  }}
+                >
+                  1 x 10
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderWidth: 2,
+                borderColor: "#FF9096",
+                padding: 10,
+                borderRadius: 45,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 16,
+                  alignItems: "center",
+                }}
+              >
+                <Mouth width={35} height={35} />
+                <Text
+                  style={{
+                    fontFamily: "PlusJakartaSans_600SemiBold",
+                    color: "#000000",
+                    fontSize: 14,
+                  }}
+                >
+                  Inflar e desinflar
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#006FFD",
+                  borderRadius: 45,
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "PlusJakartaSans_600SemiBold",
+                    color: "#FFFFFF",
+                    fontSize: 10,
+                  }}
+                >
+                  1 x 10
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderWidth: 2,
+                borderColor: "#FF9096",
+                padding: 10,
+                borderRadius: 45,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 16,
+                  alignItems: "center",
+                }}
+              >
+                <Mouth width={35} height={35} />
+                <Text
+                  style={{
+                    fontFamily: "PlusJakartaSans_600SemiBold",
+                    color: "#000000",
+                    fontSize: 14,
+                  }}
+                >
+                  Boca de peixe
                 </Text>
               </View>
               <View

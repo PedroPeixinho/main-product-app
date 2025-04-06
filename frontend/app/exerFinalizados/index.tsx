@@ -64,6 +64,7 @@ export default function AllExerciseCompletedScreen() {
           style={{
             fontSize: 14,
             fontFamily: "PlusJakartaSans_700Bold",
+            marginBottom: 30,
           }}
         >
           Volte amanhã para realizar os próximos exercícios
@@ -165,8 +166,9 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: "85%",
+    marginTop: 10,
     marginBottom: 50,
   },
   statusDuration: {

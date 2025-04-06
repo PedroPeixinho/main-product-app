@@ -15,6 +15,22 @@ export default function StartExercise() {
   const [error, setError] = useState(null);
   const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus | null>(null);
 
+  const handleStopVideo = async () => {
+    if (videoRef.current) {
+      try {
+        const videoRefCurrent = videoRef.current as any;
+        if (typeof videoRefCurrent.getStatusAsync === "function") {
+          const status = await videoRefCurrent.getStatusAsync();
+          if (status.isPlaying) {
+            await videoRefCurrent.pauseAsync();
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao manipular o vídeo:", error);
+      }
+    }
+  };
+
   const handlePlayVideo = async () => {
     if (videoRef.current) {
       try {
@@ -39,7 +55,10 @@ export default function StartExercise() {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={async () => {
+            await handleStopVideo();
+            router.back();
+          }}
         >
           <Ionicons name="chevron-back" size={24} color="#007BFF" />
         </TouchableOpacity>
@@ -147,7 +166,8 @@ export default function StartExercise() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
+          onPress={async () => {
+            await handleStopVideo();
             router.push({
               pathname: "/record",
               params: { id_exercicio },

@@ -160,7 +160,8 @@ export default function ExerciseCompletedScreen() {
 
       <ButtonApp
         title="Repetir"
-        onPress={() => {
+        onPress={async () => {
+          await handleStopVideo();
           router.push({
             pathname: "../iniciarExercicio",
             params: { id_exercicio },
