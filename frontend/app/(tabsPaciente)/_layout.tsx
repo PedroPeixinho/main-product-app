@@ -45,7 +45,7 @@ export default function TabLayoutPaciente() {
       <Tabs.Screen
         name="exercicios"
         options={{
-          title: "Pacientes",
+          title: "Exercicios",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="people" size={24} color={color} />
           ),
