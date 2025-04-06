@@ -8,6 +8,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import  IconHome  from "@/assets/images/icon_home.svg";
+import IconMouth from "../../assets/images/icon_mouth.svg";
+import UserIcon from "../../assets/images/user_icon.svg";
 
 export default function TabLayoutPaciente() {
   const colorScheme = useColorScheme();
@@ -16,7 +19,7 @@ export default function TabLayoutPaciente() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: "#006FFD",
         tabBarInactiveTintColor: Colors[colorScheme ?? "light"].tabIconDefault,
         headerShown: false,
         tabBarButton: HapticTab,
@@ -35,23 +38,28 @@ export default function TabLayoutPaciente() {
         options={{
           title: "Início",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+            <IconHome width={24} height={24} fill={color} />
           ),
         }}
-        initialParams={{
-          done: done,
-        }}
       />
+
       <Tabs.Screen
         name="exercicios"
         options={{
-          title: "Exercicios",
+          title: "Exercícios",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="people" size={24} color={color} />
+            <IconMouth width={24} height={24} fill={color} />
           ),
         }}
-        initialParams={{
-          done: done,
+      />
+
+      <Tabs.Screen
+        name="perfil"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color }) => (
+            <UserIcon width={22} height={22} fill={color} />
+          ),
         }}
       />
     </Tabs>

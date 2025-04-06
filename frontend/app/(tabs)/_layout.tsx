@@ -8,6 +8,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import UserIcon from "../../assets/images/user_icon.svg";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -48,11 +49,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="logout"
+        name="perfil"
         options={{
-          title: "Logout",
+          title: "Perfil",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="people" size={24} color={color} />
+            <UserIcon width={22} height={22} fill={color} />
           ),
         }}
       />
