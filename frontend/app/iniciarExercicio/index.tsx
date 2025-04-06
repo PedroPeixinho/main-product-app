@@ -115,11 +115,11 @@ export default function StartExercise() {
             {id_exercicio == "1"
               ? "1x10"
               : id_exercicio == "2"
-                ? "Protruir e retrair"
+                ? "1x10"
                 : id_exercicio == "3"
-                  ? "Inflar e desinflar"
+                  ? "1x10"
                   : id_exercicio == "4"
-                    ? "Boca de peixe"
+                    ? "1x10"
                     : "Exercicio nao cadastrado"}
           </Text>
         </View>
