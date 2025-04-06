@@ -41,7 +41,7 @@ export default function PatientProfile() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/pacientes/${cpf}/feedback`,
+        `${process.env.EXPO_PUBLIC_API_URL}/pacientes/${cpf}/feedback`,
         {
           method: "POST",
           headers: {
@@ -66,8 +66,9 @@ export default function PatientProfile() {
 
   const fetchPatientName = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/pacientes/${cpf}`);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pacientes/${cpf}`);
       const data = await response.json();
+      console.log(data);
       setPatientName(data.nome);
     } catch (error) {
       console.error("Erro ao buscar o nome do paciente:", error);
@@ -80,7 +81,7 @@ export default function PatientProfile() {
   // Função para buscar os exercícios
   const fetchExercises = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/exercicios/${cpf}`);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/exercicios/${cpf}`);
       const data: Exercise[] = await response.json();
       setExercises(data);
     } catch (error) {

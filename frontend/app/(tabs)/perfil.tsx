@@ -70,11 +70,8 @@ export default function PatientProfile() {
               >
                 {patientName || "Carregando..."}
               </Text>
-              <Text style={{ fontSize: 16, marginTop: -8, color: "#50525A" }}>
-                5 anos
-              </Text>
               <Text style={{ fontSize: 16, marginTop: 5, color: "#50525A" }}>
-                Fonoaudióloga
+                Fonoaudiólogo(a)
               </Text>
             </View>
           </View>

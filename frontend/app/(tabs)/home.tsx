@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native";
 import { PacienteService } from "@/services/pacientes";
 import { useRouter } from "expo-router";
 import WideButton from "@/components/wideButton";
+import { getUserDetails } from "@/services/auth";
 
 interface Question {
   avatarUrl?: string;
@@ -21,6 +22,16 @@ export default function Home() {
   const [qtdPatients, setQtdPatients] = useState<number>(0);
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userDetails = await getUserDetails();
+        if (userDetails?.cpf) setName(userDetails.nome);
+      } catch (error) {
+        console.error("Erro ao buscar detalhes do usuário:", error);
+      }
+    };
+
+    fetchUser();
     const fetchPatients = async () => {
       try {
         const response = await PacienteService.getPacientes();
@@ -38,7 +49,6 @@ export default function Home() {
       }
     };
     fetchPatients();
-
     const fetchQuestion = async () => {
       try {
         const response = await PacienteService.getDuvidas();
