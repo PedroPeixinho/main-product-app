@@ -75,31 +75,6 @@ export default function StartExercise() {
               </View>
             )}
           </TouchableOpacity>
-          {/* {exercise?.video_exemplo ? (
-            <TouchableOpacity
-              style={styles.videoWrapper}
-              onPress={handlePlayVideo}
-              activeOpacity={0.8}
-            >
-              <Video
-                ref={videoRef}
-                source={{ uri: "https://youtu.be/6x3UkAMjRiw" }}
-                style={styles.video}
-                useNativeControls={false}
-                resizeMode={ResizeMode.CONTAIN}
-                onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
-              />
-              {videoStatus?.isLoaded && !videoStatus.isPlaying && (
-                <View style={styles.playButton}>
-                  <Ionicons name="play" size={24} color="#FFFFFF" />
-                </View>
-              )}
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.playButton}>
-              <Ionicons name="play" size={24} color="#FFFFFF" />
-            </View>
-          )} */}
         </View>
 
         <Text style={styles.exerciseTitle}>

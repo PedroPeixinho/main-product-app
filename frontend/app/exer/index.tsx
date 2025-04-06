@@ -21,6 +21,22 @@ export default function ExerciseCompletedScreen() {
 
   const videoRef = useRef(null);
 
+  const handleStopVideo = async () => {
+    if (videoRef.current) {
+      try {
+        const videoRefCurrent = videoRef.current as any;
+        if (typeof videoRefCurrent.getStatusAsync === "function") {
+          const status = await videoRefCurrent.getStatusAsync();
+          if (status.isPlaying) {
+            await videoRefCurrent.pauseAsync();
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao manipular o vídeo:", error);
+      }
+    }
+  };
+
   const handlePlayVideo = async () => {
     if (videoRef.current) {
       try {
@@ -121,7 +137,8 @@ export default function ExerciseCompletedScreen() {
 
       <ButtonApp
         title={id_exercicio == "4" ? "Finalizar" : "Proximo exercício"}
-        onPress={() => {
+        onPress={async () => {
+          await handleStopVideo();
           if (id_exercicio == "4") {
             router.push({
               pathname: "/exerFinalizados",

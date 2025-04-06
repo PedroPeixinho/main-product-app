@@ -96,18 +96,12 @@ export default function RecordScreen() {
         setWaiting(false);
         if (result) {
           console.log("Vídeo enviado com sucesso!");
-          console.log(
-            "nome video: ",
-            result.data.videoPath.split("/")[
-              result.data.videoPath.split("/").length - 1
-            ]
-          );
           router.push({
             pathname: "/exer",
             params: {
               id_exercicio,
               videoURL: 1,
-              result: "Correto",
+              result: result.data.resultado,
               nomeVideo:
                 result.data.videoPath.split("/")[
                   result.data.videoPath.split("/").length - 1
