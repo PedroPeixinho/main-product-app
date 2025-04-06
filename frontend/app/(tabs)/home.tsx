@@ -82,7 +82,7 @@ export default function Home() {
           <WideButton
             text="Cadastrar paciente"
             onPress={() => {
-              router.navigate("../patientProfile/patientProfile");
+              router.navigate("../patient/new_patient");
             }}
           />
         </View>
