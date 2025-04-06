@@ -54,7 +54,6 @@ export default function RecordScreen() {
   let timer: any = null;
   // const cpf = '12345678900';
   const cpf = userDetails.cpf;
-  // const id_exercicio = 1;
   const { id_exercicio } = useLocalSearchParams();
   const exercicioId = Number(id_exercicio);
 
@@ -97,7 +96,17 @@ export default function RecordScreen() {
         setWaiting(false);
         if (result) {
           console.log("Vídeo enviado com sucesso!");
-          //router.push('./exer');
+          if (id_exercicio == "4") {
+            router.push({
+              pathname: "/exerFinalizados",
+              params: { id_exercicio, videoURL: 1, result: "Correto" },
+            }); //MUDAR ROTA
+          } else {
+            router.push({
+              pathname: "/exer",
+              params: { id_exercicio, videoURL: 1, result: "Correto" },
+            }); //MUDAR ROTA
+          }
         } else {
           console.error("Falha ao enviar o vídeo.");
         }

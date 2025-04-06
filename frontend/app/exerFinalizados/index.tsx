@@ -7,7 +7,7 @@ import { ButtonApp } from "@/components/ButtonApp";
 import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function ExerciseCompletedScreen() {
+export default function AllExerciseCompletedScreen() {
   const { id_exercicio, videoURL, result } = useLocalSearchParams();
   const [date, setDate] = useState(new Date());
   const [duration, setDuration] = useState("");
@@ -47,52 +47,7 @@ export default function ExerciseCompletedScreen() {
       />
 
       <Text style={styles.title}>Exercício concluído!</Text>
-      <Text style={styles.subtitle}>
-        {id_exercicio == "1"
-          ? "Lateralizar"
-          : id_exercicio == "2"
-            ? "Protruir e retrair"
-            : id_exercicio == "3"
-              ? "Inflar e desinflar"
-              : id_exercicio == "4"
-                ? "Boca de peixe"
-                : "Exercicio nao cadastrado"}
-      </Text>
-      <Text style={styles.date}>
-        {date.toLocaleDateString()} -{" "}
-        {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-      </Text>
-
-      <Image
-        style={styles.image}
-        source={{ uri: "https://example.com/image.png" }}
-      />
-
-      {/* Espaço para o vídeo enviado pelo usuário */}
-      <View style={styles.videoContainer}>
-        <TouchableOpacity
-          style={styles.videoWrapper}
-          onPress={handlePlayVideo}
-          activeOpacity={0.8}
-        >
-          <Video
-            ref={videoRef}
-            source={{
-              uri: `${process.env.EXPO_PUBLIC_API_URL}/videos/${videoURL}.mp4`,
-            }}
-            style={styles.video}
-            useNativeControls={false}
-            resizeMode={ResizeMode.CONTAIN}
-            isLooping={true}
-            onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
-          />
-          {videoStatus?.isLoaded && !videoStatus.isPlaying && (
-            <View style={styles.playButton}>
-              <Ionicons name="play" size={24} color="#FFFFFF" />
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.subtitle}>Parabéns!</Text>
 
       <View style={styles.statusContainer}>
         <View style={styles.statusDuration}>
@@ -102,39 +57,25 @@ export default function ExerciseCompletedScreen() {
           />
           <Text style={styles.statusText}>1min35s</Text>
         </View>
+      </View>
+
+      <View>
         <Text
-          style={[
-            styles.statusBadge,
-            {
-              backgroundColor:
-                result === "Correto"
-                  ? "#04AC52"
-                  : result === "Parcialmente Correto"
-                    ? "#FDA400"
-                    : "#DE0B0B",
-            },
-          ]}
+          style={{
+            fontSize: 14,
+            fontFamily: "PlusJakartaSans_700Bold",
+          }}
         >
-          {result}
+          Volte amanhã para realizar os próximos exercícios
         </Text>
       </View>
 
       <ButtonApp
-        title="Proximo exercício"
+        title="Página inicial"
         onPress={() => {
           router.push({
-            pathname: "../iniciarExercicio",
-            params: { id_exercicio: Number(id_exercicio) + 1 },
-          }); //MUDAR ROTA
-        }}
-        color="blue"
-      />
-      <ButtonApp
-        title="Repetir"
-        onPress={() => {
-          router.push({
-            pathname: "../iniciarExercicio",
-            params: { id_exercicio },
+            pathname: "/(tabsPaciente)/homePaciente",
+            params: { done: "1" },
           }); //MUDAR ROTA
         }}
         color="pink"

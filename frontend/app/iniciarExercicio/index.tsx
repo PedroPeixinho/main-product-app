@@ -6,6 +6,7 @@ import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { Platform, StatusBar } from "react-native";
 
 export default function StartExercise() {
+  const { id_exercicio } = useLocalSearchParams();
   const router = useRouter();
   const { exerciseId } = useLocalSearchParams();
   const videoRef = useRef(null);
@@ -60,7 +61,7 @@ export default function StartExercise() {
             <Video
               ref={videoRef}
               source={{
-                uri: `${process.env.EXPO_PUBLIC_API_URL}/videos/video-exemplo.mp4`,
+                uri: `${process.env.EXPO_PUBLIC_API_URL}/videos/${id_exercicio}.mp4`,
               }}
               style={styles.video}
               useNativeControls={false}
@@ -103,12 +104,30 @@ export default function StartExercise() {
 
         <Text style={styles.exerciseTitle}>
           {/* {exercise?.nome_exercicio || "Lateralizar"} */}
-          Lateralizar
+          {id_exercicio == "1"
+            ? "Lateralizar"
+            : id_exercicio == "2"
+              ? "Protruir e retrair"
+              : id_exercicio == "3"
+                ? "Inflar e desinflar"
+                : id_exercicio == "4"
+                  ? "Boca de peixe"
+                  : "Exercicio nao cadastrado"}
         </Text>
 
         <View style={styles.tagContainer}>
           {/* <Text style={styles.tag}>{reps}</Text> */}
-          <Text style={styles.tag}>1x10</Text>
+          <Text style={styles.tag}>
+            {id_exercicio == "1"
+              ? "1x10"
+              : id_exercicio == "2"
+                ? "Protruir e retrair"
+                : id_exercicio == "3"
+                  ? "Inflar e desinflar"
+                  : id_exercicio == "4"
+                    ? "Boca de peixe"
+                    : "Exercicio nao cadastrado"}
+          </Text>
         </View>
 
         <View
@@ -116,12 +135,24 @@ export default function StartExercise() {
             marginTop: 23,
           }}
         >
-          <Text style={styles.info}>
-            1 ) Realizar 10x de cada lado, 1 vez ao dia
-          </Text>
-          <Text style={styles.info}>
-            2 ) Tocar ponta da língua nas laterais dos lábios
-          </Text>
+          {id_exercicio == "1" ? (
+            <>
+              <Text style={styles.info}>
+                1 ) Realizar 10x de cada lado, 1 vez ao dia
+              </Text>
+              <Text style={styles.info}>
+                2 ) Tocar ponta da língua nas laterais dos lábios
+              </Text>
+            </>
+          ) : id_exercicio == "2" ? (
+            <Text style={styles.info}>Protruir e retrair</Text>
+          ) : id_exercicio == "3" ? (
+            <Text style={styles.info}>"Inflar e desinflar"</Text>
+          ) : id_exercicio == "4" ? (
+            <Text style={styles.info}>"Boca de peixe"</Text>
+          ) : (
+            <Text style={styles.info}>"Exercicio nao cadastrado"</Text>
+          )}
         </View>
 
         {/* {loading ? (
@@ -144,7 +175,7 @@ export default function StartExercise() {
           onPress={() => {
             router.push({
               pathname: "/record",
-              params: { id_exercicio: 1 },
+              params: { id_exercicio },
             }); //MUDAR ROTA
           }} // trocar para a rota correta
         >
