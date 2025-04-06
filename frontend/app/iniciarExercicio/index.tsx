@@ -141,11 +141,13 @@ export default function StartExercise() {
           ) : id_exercicio == "2" ? (
             <Text style={styles.info}>Protruir e retrair</Text>
           ) : id_exercicio == "3" ? (
-            <Text style={styles.info}>"Inflar e desinflar"</Text>
+            <Text style={styles.info}>
+              1) Inflar cada lado da bochecha 10x com os lábios fechados
+            </Text>
           ) : id_exercicio == "4" ? (
             <Text style={styles.info}>"Boca de peixe"</Text>
           ) : (
-            <Text style={styles.info}>"Exercicio nao cadastrado"</Text>
+            <Text style={styles.info}>Exercicio nao cadastrado</Text>
           )}
         </View>
 
