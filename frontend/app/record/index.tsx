@@ -93,6 +93,7 @@ export default function RecordScreen() {
       if (videoRecord) {
         setWaiting(true);
         const result = await uploadVideoService(cpf, exercicioId, videoRecord);
+        console.log(result.data);
         setWaiting(false);
         if (result) {
           console.log("Vídeo enviado com sucesso!");
@@ -106,6 +107,7 @@ export default function RecordScreen() {
                 result.data.videoPath.split("/")[
                   result.data.videoPath.split("/").length - 1
                 ],
+              duration: result.data.duration,
             },
           });
         } else {

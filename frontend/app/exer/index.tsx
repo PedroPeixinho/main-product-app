@@ -1,16 +1,17 @@
 import React, { useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { ButtonApp } from "@/components/ButtonApp";
 import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ExerciseCompletedScreen() {
-  const { id_exercicio, videoURL, result, nomeVideo } = useLocalSearchParams();
+  const { id_exercicio, videoURL, result, nomeVideo, duration } = useLocalSearchParams();
   const [date, setDate] = useState(new Date());
-  const [duration, setDuration] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [seconds, setSeconds] = useState("");
   const [status, setStatus] = useState("");
   const [video, setVideo] = useState("");
   const [nameExecution, setNameExecution] = useState("");
@@ -20,6 +21,18 @@ export default function ExerciseCompletedScreen() {
   const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus | null>(null);
 
   const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (duration && typeof duration === "string") {
+      const totalSeconds = parseInt(duration);
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+  
+      setMinutes(String(mins).padStart(1, "0"));
+      setSeconds(String(secs).padStart(2, "0"));
+    }
+  }, [duration]);
+  
 
   const handleStopVideo = async () => {
     if (videoRef.current) {
@@ -116,7 +129,7 @@ export default function ExerciseCompletedScreen() {
             style={styles.relogio}
             source={require("@/assets/images/icon_relogio.png")}
           />
-          <Text style={styles.statusText}>1min35s</Text>
+          <Text style={styles.statusText}>{`${minutes}min${seconds}s`}</Text>
         </View>
         <Text
           style={[

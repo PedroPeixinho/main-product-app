@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const FormData = require("form-data");
 const axios = require("axios");
+const { getVideoDurationInSeconds } = require('get-video-duration');
 
 const api = axios.create({
   baseURL: `${process.env.API_AI}/`,
@@ -24,8 +25,10 @@ exports.uploadVideo = async (req, res) => {
       return res.status(400).json({ error: "Nenhum vídeo enviado." });
     }
 
+    const fullPath = req.file.path;
     const video = req.file;
     const videoPath = `/uploads/videos/${video.filename}`;
+    const duration = await getVideoDurationInSeconds(fullPath);
 
     // Salva no banco
     await prisma.gravacoes.create({
@@ -38,9 +41,9 @@ exports.uploadVideo = async (req, res) => {
 
     console.log("Vídeo salvo no banco de dados com sucesso.");
 
-    await sendToAvaliable(video, id_exercicio.toString());
+    const result = await sendToAvaliable(video, id_exercicio.toString());
 
-    res.status(200).json({ resultado: "Correto", videoPath });
+    res.status(200).json({ resultado: result, videoPath, duration});
   } catch (err) {
     console.error("Erro ao salvar vídeo:", err);
     res.status(500).json({ error: "Erro ao salvar vídeo." });
@@ -65,6 +68,7 @@ async function sendToAvaliable(video, nome_exercicio) {
     });
 
     console.log("Vídeo enviado para a i.a:", response.data);
+    return response.data;
   } catch (error) {
     console.error("Erro ao enviar vídeo para backend Python:", error.message);
   }
