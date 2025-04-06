@@ -34,7 +34,7 @@ export default function Home() {
         }));
         setQtdPatients(temp.length);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
     fetchPatients();
@@ -56,7 +56,7 @@ export default function Home() {
         }));
         setQuestion(temp);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
 

@@ -26,7 +26,7 @@ export default function StartExercise() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };
@@ -44,7 +44,7 @@ export default function StartExercise() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };

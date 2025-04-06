@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "expo-router";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const isAuthenticated = async (): Promise<boolean> => {
   const token = await AsyncStorage.getItem("token");
@@ -15,7 +15,6 @@ export const isAuthenticated = async (): Promise<boolean> => {
   }
 };
 
-
 export const getUserDetails = async (): Promise<any | null> => {
   try {
     const token = await AsyncStorage.getItem("token");
@@ -25,13 +24,16 @@ export const getUserDetails = async (): Promise<any | null> => {
     const is_fono = payload.is_fono; // Get is_fono flag
 
     const endpoint = is_fono ? "/auth/fono/details" : "/auth/patient/details";
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}${endpoint}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}${endpoint}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch user details");
@@ -40,11 +42,10 @@ export const getUserDetails = async (): Promise<any | null> => {
     const data = await response.json();
     return { ...data, is_fono };
   } catch (error) {
-    console.error("Error fetching user details:", error);
+    console.log("Error fetching user details:", error);
     return null;
   }
 };
-
 
 export const useAuthRedirect = () => {
   const router = useRouter();
@@ -57,19 +58,18 @@ export const useAuthRedirect = () => {
 
         const userDetails = await getUserDetails();
         if (userDetails?.is_fono) {
-          router.push("../(tabs)/home");    //MUDAR ROTA
+          router.push("../(tabs)/home"); //MUDAR ROTA
         } else {
-          router.push("../(tabs)/home2");    //MUDAR ROTA
+          router.push("../(tabs)/home2"); //MUDAR ROTA
         }
       } catch (error) {
-        console.error("Erro ao verificar autenticação:", error);
+        console.log("Erro ao verificar autenticação:", error);
       }
     };
 
     checkAuth();
   }, [router]);
 };
-
 
 export const logout = async (): Promise<void> => {
   await AsyncStorage.removeItem("token"); // Remove token
