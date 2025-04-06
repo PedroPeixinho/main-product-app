@@ -8,6 +8,7 @@ import StatusFeito from "../../assets/images/statusFeito.svg";
 import StatusMedia from "../../assets/images/statusMedia.svg";
 import StatusNaoFeito from "../../assets/images/statusNaoFeito.svg";
 import StatusReprovado from "../../assets/images/statusReprovado.svg";
+import { ExerciseTag } from "@/components/ExerciseTagProps";
 
 interface Question {
   avatarUrl?: string;
@@ -198,7 +199,104 @@ export default function HomePaciente() {
           </View>
         </View>
       ) : (
-        <View style={styles.tabContent}>progresso</View>
+        
+        <View style={styles.tabContent}>
+          <Text style={styles.subtitle}>Desempenho</Text>
+          <View style={styles.infoTextDivLine}>
+            <Text>Ultimos 7 dias</Text>
+            <Text style={styles.regularLabel}>REGULAR</Text>
+          </View>
+          <View style={styles.divider} />
+          <Text style={styles.subtitleWithMargin}>Motricidade Orofacial</Text>
+          <View style={{ flexDirection: "column", gap: 8 }}>
+            <ExerciseTag
+              label="ÓTIMO"
+              exerciseName="Lateralizar"
+              labelColor="#4CAF50"
+            />
+            <ExerciseTag
+              label="BAIXO"
+              exerciseName="Protruir e retrair"
+              labelColor="#FDA400"
+            />
+            <ExerciseTag
+              label="ÓTIMO"
+              exerciseName="Inflar e Desinflar"
+              labelColor="#4CAF50"
+            />
+            <ExerciseTag
+              label="REGULAR"
+              exerciseName="Boca de Peixe"
+              labelColor="#FF9096"
+            />
+          </View>
+
+          <Text style={styles.subtitleWithMargin}>Frequencia</Text>
+          <View style={styles.infoTextDivLine}>
+            <Text>Ultimos 7 dias</Text>
+            <View style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 40,
+                justifyContent: "space-between",
+            }}>
+              <Text style={{ fontWeight: "bold"}}>60%</Text>
+              <Text style={styles.regularLabel}>REGULAR</Text>
+            </View>
+          </View>
+          <View style={styles.divider} />
+          <View
+              style={{
+                margin: "5%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              {renderDaysOfWeek(today)}
+          </View>
+          <View style={styles.divider} />
+          <View style={styles.infoTextDivLine}>
+            <Text>Ultimo mês</Text>
+            <View style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 40,
+                justifyContent: "space-between",
+            }}>
+              <Text style={{ fontWeight: "bold"}}>85%</Text>
+              <Text style={styles.bomLabel}>BOM</Text>
+            </View>
+          </View>
+          <View style={styles.infoTextDivLine}>
+            <Text>Ultimos 3 meses</Text>
+            <View style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 40,
+                justifyContent: "space-between",
+            }}>
+              <Text style={{ fontWeight: "bold"}}>75%</Text>
+              <Text style={styles.bomLabel}>BOM</Text>
+            </View>
+          </View>
+          <View style={styles.infoTextDivLine}>
+            <Text>Tratamento completo</Text>
+            <View style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 40,
+                justifyContent: "space-between",
+            }}>
+              <Text style={{ fontWeight: "bold"}}>80%</Text>
+              <Text style={styles.bomLabel}>BOM</Text>
+            </View>
+          </View>
+
+        </View>
       )}
     </ScrollView>
   );
@@ -227,6 +325,13 @@ const styles = StyleSheet.create({
     fontWeight: 800,
     fontFamily: "PlusJakartaSans_700Bold",
   },
+  subtitleWithMargin: {
+    marginTop: 16,
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: 800,
+    fontFamily: "PlusJakartaSans_700Bold",
+  },
   appointmentItemTextDiv: {
     flexDirection: "row",
     alignItems: "center",
@@ -236,7 +341,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
     height: 1,
     backgroundColor: "#E7E7E7",
-    marginHorizontal: 24,
+    marginHorizontal: "1%",
+  },
+  infoTextDivLine: {
+    alignItems: "center",
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   tabs: {
     flexDirection: "row",
@@ -271,5 +383,21 @@ const styles = StyleSheet.create({
   tabContent: {
     marginTop: 16,
     marginHorizontal: 24,
+  },
+  regularLabel: {
+    backgroundColor: "#FF9096",
+    color: "white",
+    padding: 8,
+    borderRadius: 50,
+    fontFamily: "PlusJakartaSans_600SemiBold",
+    fontSize: 10,
+  },
+  bomLabel: {
+    backgroundColor: "#006FFD",
+    color: "white",
+    padding: 8,
+    borderRadius: 50,
+    fontFamily: "PlusJakartaSans_600SemiBold",
+    fontSize: 10,
   },
 });
