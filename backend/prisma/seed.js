@@ -75,22 +75,44 @@ async function main() {
   // Inserir exercícios na tabela Exercicios
   const exerciciosC = [
     {
+      //id: 1,
       nome_exercicio: "Lateralizar",
       repeticoes: 10,
       texto_descritivo: "Movimentar a língua da esquerda para a direita lentamente.",
-      video_exemplo: "https://www.youtube.com/watch?v=video1",
+      video_exemplo: "1.mp4",
       cpf_fono: "98765432100",
       cpf_paciente: "12345678900",
-      data_execucao: new Date("2025-04-04"),
+      data_execucao: new Date("2025-04-05"),
     },
     {
-      nome_exercicio: "Afilar Língua",
+      //id: 2,
+      nome_exercicio: "Protruir e retrair",
       repeticoes: 8,
-      texto_descritivo: "Afilar a língua por 5 segundos, depois relaxar.",
-      video_exemplo: "https://www.youtube.com/watch?v=video2",
+      texto_descritivo: "Colocar a língua para fora da boca e traze-la para dentro.",
+      video_exemplo: "2.mp4",
       cpf_fono: "98765432100",
       cpf_paciente: "12345678900",
-      data_execucao: new Date("2025-04-04"),
+      data_execucao: new Date("2025-04-05"),
+    },
+    {
+      //id: 3,
+      nome_exercicio: "Inflar e desinflar",
+      repeticoes: 8,
+      texto_descritivo: "Inflar e desinflar as bochechas.",
+      video_exemplo: "3.mp4",
+      cpf_fono: "98765432100",
+      cpf_paciente: "12345678900",
+      data_execucao: new Date("2025-04-05"),
+    },
+    {
+      //id: 4,
+      nome_exercicio: "Boca de Peixe",
+      repeticoes: 8,
+      texto_descritivo: "Inflar e desinflar as bochechas.",
+      video_exemplo: "4.mp4",
+      cpf_fono: "98765432100",
+      cpf_paciente: "12345678900",
+      data_execucao: new Date("2025-04-05"),
     }
   ];
 
