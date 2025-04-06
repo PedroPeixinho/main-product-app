@@ -9,6 +9,7 @@ import StatusNaoFeito from "../../assets/images/statusNaoFeito.svg";
 import StatusReprovado from "../../assets/images/statusReprovado.svg";
 import Baloon from "../../assets/images/baloon.svg";
 import Mouth from "../../assets/images/mouth.svg";
+import { Platform } from "react-native";
 
 interface Question {
   avatarUrl?: string;
@@ -288,16 +289,13 @@ export default function Exercicios() {
 
       <View
         style={{
-          marginBottom: 14,
+          marginBottom: Platform.OS === "ios" ? 114 : 14,
         }}
       >
         <WideButton
           text="Vamos Praticar?"
           onPress={() => {
-            router.push({
-              pathname: "/record",
-              params: { id_exercicio: 1 },
-            }); //MUDAR ROTA
+            router.push("../iniciarExercicio");
           }}
           variant="noIcon"
         />
