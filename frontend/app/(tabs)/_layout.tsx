@@ -9,6 +9,8 @@ import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import UserIcon from "../../assets/images/user_icon.svg";
+import { FontAwesome } from "@expo/vector-icons";
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -48,6 +50,17 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+      name="duvidas"
+      options={{
+        title: "duvidas",
+        tabBarIcon: ({ color }) => (
+          <FontAwesome name="comments" size={22} color={color} />
+        ),
+      }}  
+      />
+
       <Tabs.Screen
         name="perfil"
         options={{
@@ -57,6 +70,9 @@ export default function TabLayout() {
           ),
         }}
       />
-    </Tabs>
+
+      
+      </Tabs>
+    
   );
 }
