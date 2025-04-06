@@ -6,6 +6,7 @@ import {
   Pressable,
   Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import {
   CameraMode,
@@ -93,7 +94,6 @@ export default function RecordScreen() {
       if (videoRecord) {
         setWaiting(true);
         const result = await uploadVideoService(cpf, exercicioId, videoRecord);
-        console.log(result.data);
         setWaiting(false);
         if (result) {
           console.log("Vídeo enviado com sucesso!");
@@ -111,12 +111,64 @@ export default function RecordScreen() {
             },
           });
         } else {
-          console.error("Falha ao enviar o vídeo.");
+          Alert.alert("Erro", "Ocorreu um erro ao gravar o vídeo.", [
+            {
+              text: "Repetir exercicio",
+              onPress: () => setWaiting(false),
+            },
+            {
+              text: "Pular exercicio",
+              onPress: () => {
+                if (id_exercicio == "4") {
+                  router.push({
+                    pathname: "/exerFinalizados",
+                    params: {
+                      id_exercicio,
+                      videoURL: 1,
+                      result: "Correto",
+                    },
+                  }); //MUDAR ROTA
+                } else {
+                  router.push({
+                    pathname: "../iniciarExercicio",
+                    params: { id_exercicio: Number(id_exercicio) + 1 },
+                  }); //MUDAR ROTA
+                }
+              },
+            },
+          ]);
+          console.log("Falha ao enviar o vídeo.");
         }
       }
     } catch (error) {
+      Alert.alert("Erro", "Ocorreu um erro ao gravar o vídeo.", [
+        {
+          text: "Repetir exercicio",
+          onPress: () => setWaiting(false),
+        },
+        {
+          text: "Pular exercicio",
+          onPress: () => {
+            if (id_exercicio == "4") {
+              router.push({
+                pathname: "/exerFinalizados",
+                params: {
+                  id_exercicio,
+                  videoURL: 1,
+                  result: "Correto",
+                },
+              }); //MUDAR ROTA
+            } else {
+              router.push({
+                pathname: "../iniciarExercicio",
+                params: { id_exercicio: Number(id_exercicio) + 1 },
+              }); //MUDAR ROTA
+            }
+          },
+        },
+      ]);
       clearInterval(timer);
-      console.error("Erro ao gravar vídeo:", error);
+      console.log("Erro ao gravar vídeo:", error);
       setInstructionText("Erro ao iniciar a gravação.");
       setRecording(false);
     }
