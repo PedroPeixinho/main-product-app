@@ -11,6 +11,8 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import  IconHome  from "@/assets/images/icon_home.svg";
 import IconMouth from "../../assets/images/icon_mouth.svg";
 import UserIcon from "../../assets/images/user_icon.svg";
+import { FontAwesome } from "@expo/vector-icons";
+
 
 export default function TabLayoutPaciente() {
   const colorScheme = useColorScheme();
@@ -49,6 +51,16 @@ export default function TabLayoutPaciente() {
           title: "Exercícios",
           tabBarIcon: ({ color }) => (
             <IconMouth width={24} height={24} fill={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="feedback"
+        options={{
+          title: "feedback",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="comments" size={22} color={color} />
           ),
         }}
       />
