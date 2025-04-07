@@ -54,10 +54,27 @@ export default function PatientProfile() {
         <View style={styles.body}>
           <View style={styles.profileBannerDiv}>
             <View style={{ alignItems: "center", gap: 10 }}>
-              <Image
-                style={{ width: 90, height: 90, borderRadius: 100 }}
-                source={require("../../assets/images/Sofia.png")}
-              />
+            <View
+              style={{
+                width: 62,
+                height: 62,
+                borderRadius: 36,
+                backgroundColor: "#E7E7E7",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "#000", fontSize: 21 }}>
+                {patientName
+                  ? patientName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .slice(0, 2)
+                      .join("")
+                      .toUpperCase()
+                  : "?"}
+              </Text>
+            </View>
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"

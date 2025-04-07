@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-
+import { useLocalSearchParams } from "expo-router";
 
 export default function ChatScreen() {
   const router = useRouter();
@@ -23,6 +23,24 @@ export default function ChatScreen() {
     { id: "2", text: "Tenho notado que Sofia têm ido mal no exercício de estalar, pode dar uma olhada? É normal?", sender: "other" },
   ]);
   const [input, setInput] = useState("");
+  const { cpf } = useLocalSearchParams();
+  const [patientName, setPatientName] = useState("");
+
+  const fetchPatientName = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/progresso/pacientes/${cpf}`
+      );
+      const data = await response.json();
+      setPatientName(data.nome);
+    } catch (error) {
+      console.log("Erro ao buscar o nome do paciente:", error);
+    }
+  };
+  useEffect(() => {
+    fetchPatientName();
+  }, []);
+
 
   const handleSend = () => {
     if (input.trim() === "") return;
@@ -42,14 +60,29 @@ export default function ChatScreen() {
          <MaterialIcons name="arrow-back-ios" size={24} color="#006FFD" />
         </TouchableOpacity>
 
-        <Text style={styles.name}>Miguel Oliveira</Text>
+        <Text style={styles.name}>{patientName}</Text>
 
-        <Image
-          source={{
-            uri: "https://avatars.githubusercontent.com/u/55458349?v=4",
-          }}
-          style={styles.avatar}
-        />
+        <View
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 26,
+              backgroundColor: "#E7E7E7",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "#000", fontSize: 14 }}>
+              {patientName
+                ? patientName
+                    .split(" ")
+                    .map((n) => n[0])
+                    .slice(0, 2)
+                    .join("")
+                    .toUpperCase()
+                : "?"}
+            </Text>
+          </View>
       </View>
 
       <FlatList
@@ -69,7 +102,7 @@ export default function ChatScreen() {
                   item.sender === "me" && { color: "#fff" },
                 ]}
               >
-                {item.sender === "me" ? "Você" : "Miguel Oliveira"}
+                {item.sender === "me" ? "Você" : `${patientName}`}
               </Text>
               <Text
                 style={[

@@ -72,7 +72,7 @@ export default function PatientLoginScreen() {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Usuário"
+          placeholder="E-mail"
           placeholderTextColor="#888"
           value={nomeUsuario}
           onChangeText={setNomeUsuario}

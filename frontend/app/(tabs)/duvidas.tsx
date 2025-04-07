@@ -20,6 +20,7 @@ interface Patient {
   status: "emAcompanhamento" | "emAvaliacao" | "concluido";
   horarioConsulta: string;
   avatarUrl?: string;
+  cpf: string;
 }
 
 export default function Explore() {
@@ -39,6 +40,7 @@ export default function Explore() {
           status: patient.status,
           horarioConsulta: patient.horario_consulta,
           avatarUrl: patient.avatar_url,
+          cpf: patient.cpf,
         }));
         setPatients(temp);
       } catch (error) {
@@ -98,7 +100,10 @@ export default function Explore() {
               style={styles.patientItemDiv}
               key={item.id}
               onPress={() => {
-                router.navigate("../patientProfile/patientchat");
+                router.navigate({
+                  pathname: "../patientProfile/patientchat",
+                  params: { cpf: item.cpf },
+                });
               }}
             >
               {item.avatarUrl && (

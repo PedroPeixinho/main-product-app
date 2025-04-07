@@ -60,7 +60,7 @@ export const useAuthRedirect = () => {
         if (userDetails?.is_fono) {
           router.push("../(tabs)/home"); //MUDAR ROTA
         } else {
-          router.push("../(tabs)/home2"); //MUDAR ROTA
+          router.push("../(tabsPaciente)/homePaciente"); //MUDAR ROTA
         }
       } catch (error) {
         console.log("Erro ao verificar autenticação:", error);

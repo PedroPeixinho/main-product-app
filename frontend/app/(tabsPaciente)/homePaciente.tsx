@@ -9,6 +9,7 @@ import StatusMedia from "../../assets/images/statusMedia.svg";
 import StatusNaoFeito from "../../assets/images/statusNaoFeito.svg";
 import StatusReprovado from "../../assets/images/statusReprovado.svg";
 import { ExerciseTag } from "@/components/ExerciseTagProps";
+import { getUserDetails } from "@/services/auth";
 
 interface Question {
   avatarUrl?: string;
@@ -72,6 +73,17 @@ export default function HomePaciente() {
   };
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userDetails = await getUserDetails();
+        if (userDetails?.cpf) setName(userDetails.nome);
+      } catch (error) {
+        console.error("Erro ao buscar detalhes do usuário:", error);
+      }
+    };
+
+    fetchUser();
+
     const fetchPatients = async () => {
       try {
         const response = await PacienteService.getPacientes();

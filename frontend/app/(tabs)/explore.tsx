@@ -112,7 +112,10 @@ export default function Explore() {
               style={styles.patientItemDiv}
               key={item.id}
               onPress={() => {
-                router.navigate("../patientProfile/patientProfile");
+                router.push({
+                  pathname: "../patientProfile/patientProfile",
+                  params: { cpf: item.id },
+                });
               }}
             >
               {item.avatarUrl && (

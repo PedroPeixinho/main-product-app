@@ -14,6 +14,12 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useState, useEffect } from "react";
+import { useLocalSearchParams } from "expo-router";
+import StatusFeito from "../../assets/images/statusFeito.svg";
+import StatusMedia from "../../assets/images/statusMedia.svg";
+import StatusNaoFeito from "../../assets/images/statusNaoFeito.svg";
+import StatusReprovado from "../../assets/images/statusReprovado.svg";
+
 
 // Interface para os exercícios
 interface Exercise {
@@ -23,52 +29,61 @@ interface Exercise {
 }
 
 export default function PatientProfile() {
+  const { cpf } = useLocalSearchParams();
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState("Exercícios");
   const [selectedSubTab, setSelectedSubTab] = useState("7 dias");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [patientName, setPatientName] = useState("");
   const [hiddenExercises, setHiddenExercises] = useState<string[]>([]);
-  const [feedback, setFeedback] = useState(""); // Estado para armazenar o feedback
+  const [today, setToday] = useState(new Date().getDay());
 
-  const cpf = "12345678900";
+  const renderDaysOfWeek = (lastDayIndex: number) => {
+    let daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
 
-  const sendFeedback = async () => {
-    if (!feedback.trim()) {
-      alert("Por favor, digite um feedback antes de enviar.");
-      return;
-    }
+    daysOfWeek = [
+      ...daysOfWeek.slice(lastDayIndex + 1),
+      ...daysOfWeek.slice(0, lastDayIndex + 1),
+    ];
 
-    try {
-      const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/progresso/pacientes/${cpf}/feedback`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ feedback }),
-        }
-      );
-
-      if (response.ok) {
-        alert("Feedback enviado com sucesso!");
-        setFeedback(""); // Limpa o campo de texto após o envio
-      } else {
-        const errorData = await response.json();
-        alert(`Erro ao enviar feedback: ${errorData.error}`);
-      }
-    } catch (error) {
-      console.log("Erro ao enviar feedback:", error);
-      alert("Erro ao enviar feedback. Tente novamente mais tarde.");
-    }
+    return daysOfWeek.map((day, index) => (
+      <View
+        key={index}
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 14,
+            fontFamily: "PlusJakartaSans_400Regular",
+            color: index === today ? "#000" : "#50525A",
+            fontWeight: index === today ? "bold" : "normal",
+          }}
+        >
+          {day}
+        </Text>
+        {index == 0 || index == 3 || index == 4 || index == 5 ? (
+          <StatusFeito width={24} height={24} />
+        ) : index == 1 ? (
+          <StatusReprovado width={24} height={24} />
+        ) : index == 2 ? (
+          <StatusMedia width={24} height={24} />
+        ) : (
+          <StatusNaoFeito width={24} height={24} />
+        )}
+      </View>
+    ));
   };
 
   const fetchPatientName = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/progresso/pacientes/${cpf}`);
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/progresso/pacientes/${cpf}`
+      );
       const data = await response.json();
-      console.log(data);
       setPatientName(data.nome);
     } catch (error) {
       console.log("Erro ao buscar o nome do paciente:", error);
@@ -81,11 +96,20 @@ export default function PatientProfile() {
   // Função para buscar os exercícios
   const fetchExercises = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/progresso/exercicios/${cpf}`);
-      const data: Exercise[] = await response.json();
-      setExercises(data);
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/progresso/exercicios/${cpf}`
+      );
+      const data = await response.json();
+  
+      if (Array.isArray(data)) {
+        setExercises(data);
+      } else {
+        console.error("Dados recebidos não são um array:", data);
+        setExercises([]); // previne erro
+      }
     } catch (error) {
       console.log("Erro ao buscar exercícios:", error);
+      setExercises([]); // previne erro
     }
   };
 
@@ -153,12 +177,27 @@ export default function PatientProfile() {
         </View>
         <View style={styles.body}>
           <View style={styles.profileBannerDiv}>
-            <Image
-              style={{ width: 52, height: 52, borderRadius: 25 }}
-              source={{
-                uri: "https://avatars.githubusercontent.com/u/55458349?v=4",
-              }}
-            />
+          <View
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: 26,
+              backgroundColor: "#E7E7E7",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "#000", fontSize: 18 }}>
+              {patientName
+                ? patientName
+                    .split(" ")
+                    .map((n) => n[0])
+                    .slice(0, 2)
+                    .join("")
+                    .toUpperCase()
+                : "?"}
+            </Text>
+          </View>
             <View
               style={{
                 flex: 1,
@@ -184,14 +223,13 @@ export default function PatientProfile() {
                   Terças | 14h
                 </Text>
               </View>
-              <Entypo name="dots-three-vertical" size={20} color="black" />
             </View>
           </View>
           <View style={styles.divider} />
 
           {/* Abas */}
           <View style={styles.tabs}>
-            {["Exercícios", "Frequência", "Progresso"].map((tab) => (
+            {["Frequência", "Desempenho", "Exercícios"].map((tab) => (
               <TouchableOpacity
                 key={tab}
                 style={styles.tab}
@@ -211,11 +249,11 @@ export default function PatientProfile() {
           </View>
 
           {/* Conteúdo das abas */}
-          {selectedTab === "Progresso" && (
+          {selectedTab === "Desempenho" && (
             <View style={styles.tabContent}>
               {/* Aba de seleção */}
               <View style={styles.subTabs}>
-                {["7 dias", "Mensal", "3 meses"].map((period) => (
+                {["7 dias", "3 meses", "Tratamento Inteiro"].map((period) => (
                   <TouchableOpacity
                     key={period}
                     style={[
@@ -238,7 +276,7 @@ export default function PatientProfile() {
 
               {/* Progresso */}
               <View style={{ marginBottom: 8 }}>
-                <Text style={styles.progressTitle}>Progresso</Text>
+                <Text style={styles.progressTitle}>Exercicios</Text>
               </View>
 
               <View style={styles.progressContainer}>
@@ -261,7 +299,7 @@ export default function PatientProfile() {
               </View>
 
               <View style={styles.dividerLarge} />
-
+              
               {/* Exercícios realizados */}
               <Text style={styles.tabTitle}>Exercícios Realizados</Text>
               {exercises.length > 0 ? (
@@ -354,20 +392,85 @@ export default function PatientProfile() {
               />
             </View>
           )}
+          {selectedTab === "Frequência" && (
+            <View>
+              <Text style={styles.frequencyTitle}>Frequência</Text>
+              <View style={styles.infoTextDivLine}>
+                <Text style={{ fontSize: 12}}>Ultimos 7 dias</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 40,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontWeight: "bold", fontSize: 12 }}>60%</Text>
+                  <Text style={styles.regularLabel}>REGULAR</Text>
+                </View>
+              </View>
+              <View style={styles.divider} />
+              <View
+                  style={{
+                    flexDirection: "row",
+                    margin: "1%",
+                    marginTop: 16,
+                    justifyContent: "space-between",
+                  }}
+                >
+              {renderDaysOfWeek(today)}
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.infoTextDivLine}>
+              <Text>Última semana</Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 40,
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>85%</Text>
+                <Text style={styles.bomLabel}>BOM</Text>
+              </View>
+            </View>
+            <View style={styles.infoTextDivLine}>
+              <Text>3 meses</Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 40,
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>75%</Text>
+                <Text style={styles.bomLabel}>BOM</Text>
+              </View>
+            </View>
+            <View style={styles.infoTextDivLine}>
+              <Text>Tratamento inteiro</Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 40,
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>80%</Text>
+                <Text style={styles.bomLabel}>BOM</Text>
+              </View>
+            </View>
+            </View>
+          )}
         </View>
       </ScrollView>
-
-      <View style={styles.feedbackContainer}>
-        <TextInput
-          style={styles.feedbackInput}
-          placeholder="Digite seu feedback..."
-          value={feedback}
-          onChangeText={setFeedback}
-        />
-        <TouchableOpacity style={styles.feedbackButton} onPress={sendFeedback}>
-          <Text style={styles.feedbackButtonText}>Enviar</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
@@ -423,6 +526,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1, // Ocupa todo o espaço disponível (exceto o necessário para a imagem direita)
   },
+  regularLabel: {
+    backgroundColor: "#FF9096",
+    color: "white",
+    padding: 8,
+    borderRadius: 50,
+    fontFamily: "PlusJakartaSans_600SemiBold",
+    fontSize: 10,
+  },
   leftImage: {
     width: 30,
     height: 30,
@@ -468,9 +579,20 @@ const styles = StyleSheet.create({
     marginTop: 24,
     gap: 16,
   },
+  infoTextDivLine: {
+    alignItems: "center",
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   tabs: {
     flexDirection: "row",
     justifyContent: "space-around",
+    marginTop: 16,
+  },
+  frequencyTitle: {
+    fontFamily: "PlusJakartaSans_700Bold",
     marginTop: 16,
   },
   tab: {
@@ -484,12 +606,11 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontSize: 14,
-    color: "#50525A",
+    color: "#8CBEFF",
   },
   activeTabText: {
-    fontSize: 16,
-    color: "black",
-    fontWeight: "bold",
+    fontSize: 14,
+    color: "#006FFD", 
   },
   tabContent: {
     marginTop: 16,
@@ -586,6 +707,7 @@ const styles = StyleSheet.create({
   subTabText: {
     fontSize: 14,
     color: "#006FFD",
+    fontFamily: "PlusJakartaSans_600SemiBold",
   },
   activeSubTabText: {
     fontSize: 14,
@@ -674,5 +796,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1, // Permite que o conteúdo ocupe apenas o espaço necessário
     paddingBottom: 80, // Espaço para o feedback fixo
+  },
+  bomLabel: {
+    backgroundColor: "#006FFD",
+    color: "white",
+    padding: 8,
+    borderRadius: 50,
+    fontFamily: "PlusJakartaSans_600SemiBold",
+    fontSize: 10,
   },
 });
