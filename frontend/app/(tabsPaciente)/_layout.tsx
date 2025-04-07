@@ -1,18 +1,15 @@
 import { Tabs, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
-
+import { Mouth } from "healthicons-react-native";
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import  IconHome  from "@/assets/images/icon_home.svg";
 import IconMouth from "../../assets/images/icon_mouth.svg";
 import UserIcon from "../../assets/images/user_icon.svg";
 import { FontAwesome } from "@expo/vector-icons";
-
 
 export default function TabLayoutPaciente() {
   const colorScheme = useColorScheme();
@@ -21,7 +18,7 @@ export default function TabLayoutPaciente() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#006FFD",
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         tabBarInactiveTintColor: Colors[colorScheme ?? "light"].tabIconDefault,
         headerShown: false,
         tabBarButton: HapticTab,
@@ -40,7 +37,7 @@ export default function TabLayoutPaciente() {
         options={{
           title: "Início",
           tabBarIcon: ({ color }) => (
-            <IconHome width={24} height={24} fill={color} />
+            <IconSymbol size={28} name="house.fill" color={color} />
           ),
         }}
       />
@@ -50,7 +47,7 @@ export default function TabLayoutPaciente() {
         options={{
           title: "Exercícios",
           tabBarIcon: ({ color }) => (
-            <IconMouth width={24} height={24} fill={color} />
+            <Mouth width={24} height={24} color={color} />
           ),
         }}
       />
@@ -70,7 +67,7 @@ export default function TabLayoutPaciente() {
         options={{
           title: "Perfil",
           tabBarIcon: ({ color }) => (
-            <UserIcon width={22} height={22} fill={color} />
+            <FontAwesome name="user" size={22} color={color} />
           ),
         }}
       />
