@@ -1,65 +1,66 @@
+const { PrismaClient } = require("../../generated/prisma/index");
+
+const prisma = new PrismaClient();
+
 // Função para buscar exercícios realizados por CPF
-const getExercisesByCpf = (req, res) => {
+const getExercisesByCpf = async (req, res) => {
   const cpf = req.params.cpf;
 
-  const query = `
-      SELECT 
-        exercicios_realizados.nome_exercicio, 
-        exercicios_realizados.data, 
-        exercicios_realizados.nota_execucao
-      FROM exercicios_realizados
-      INNER JOIN paciente ON exercicios_realizados.cpf_paciente = paciente.cpf
-      WHERE paciente.cpf = ?
-    `;
+  try {
+    const query = `
+    SELECT 
+      ExerciciosRealizados.nome_exercicio, 
+      ExerciciosRealizados.data, 
+      ExerciciosRealizados.nota_execucao
+    FROM ExerciciosRealizados
+    INNER JOIN paciente ON ExerciciosRealizados.cpf_paciente = paciente.cpf
+    WHERE paciente.cpf = ?
+  `;
 
-  db.all(query, [cpf], (err, rows) => {
-    if (err) {
-      console.error("Erro ao executar a consulta:", err.message);
-      return res
-        .status(500)
-        .json({ error: "Erro ao buscar exercícios realizados." });
-    }
+    const exercises = await prisma.$queryRawUnsafe(query, cpf);
 
-    if (rows.length === 0) {
+    if (exercises.length === 0) {
       return res
         .status(404)
         .json({ message: "Nenhum exercício encontrado para este CPF." });
     }
 
-    res.json(rows);
-  });
+    res.json(exercises);
+  } catch (error) {
+    console.error("Erro ao buscar exercícios realizados:", error.message);
+    res.status(500).json({ error: "Erro ao buscar exercícios realizados." });
+  }
 };
 
 // Função para buscar o nome do paciente por CPF
-const getPatientNameByCpf = (req, res) => {
+const getPatientNameByCpf = async (req, res) => {
   const cpf = req.params.cpf;
 
-  const query = `
-      SELECT nome
-      FROM paciente
-      WHERE cpf = ?
-    `;
+  try {
+    const patient = await prisma.paciente.findUnique({
+      where: {
+        cpf: cpf,
+      },
+      select: {
+        nome: true,
+      },
+    });
 
-  db.get(query, [cpf], (err, row) => {
-    if (err) {
-      console.error("Erro ao executar a consulta:", err.message);
-      return res
-        .status(500)
-        .json({ error: "Erro ao buscar o nome do paciente." });
-    }
-
-    if (!row) {
+    if (!patient) {
       return res
         .status(404)
         .json({ message: "Nenhum paciente encontrado para este CPF." });
     }
 
-    res.json(row);
-  });
+    res.json(patient);
+  } catch (error) {
+    console.error("Erro ao buscar o nome do paciente:", error.message);
+    res.status(500).json({ error: "Erro ao buscar o nome do paciente." });
+  }
 };
 
 // Função para adicionar feedback ao paciente
-const addFeedbackToPatient = (req, res) => {
+const addFeedbackToPatient = async (req, res) => {
   const cpf = req.params.cpf;
   const { feedback } = req.body;
 
@@ -67,24 +68,23 @@ const addFeedbackToPatient = (req, res) => {
     return res.status(400).json({ error: "O campo 'feedback' é obrigatório." });
   }
 
-  const query = `
-        UPDATE paciente
-        SET feedback = feedback || '\n' || ?
-        WHERE cpf = ?
+  try {
+    const query = `
+      UPDATE paciente
+      SET feedback = feedback || '\n' || ?
+      WHERE cpf = ?
     `;
 
-  db.run(query, [feedback, cpf], function (err) {
-    if (err) {
-      console.error("Erro ao adicionar feedback:", err.message);
-      return res.status(500).json({ error: "Erro ao adicionar feedback." });
-    }
-
-    if (this.changes === 0) {
-      return res.status(404).json({ error: "Paciente não encontrado." });
-    }
+    await prisma.$executeRawUnsafe(query, feedback, cpf);
 
     res.status(200).json({ message: "Feedback adicionado com sucesso." });
-  });
+  } catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ error: "Paciente não encontrado." });
+    }
+    console.error("Erro ao adicionar feedback:", error.message);
+    res.status(500).json({ error: "Erro ao adicionar feedback." });
+  }
 };
 
 module.exports = {
