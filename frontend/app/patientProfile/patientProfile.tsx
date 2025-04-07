@@ -41,7 +41,7 @@ export default function PatientProfile() {
 
     try {
       const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/pacientes/${cpf}/feedback`,
+        `${process.env.EXPO_PUBLIC_API_URL}/progresso/pacientes/${cpf}/feedback`,
         {
           method: "POST",
           headers: {
@@ -59,19 +59,19 @@ export default function PatientProfile() {
         alert(`Erro ao enviar feedback: ${errorData.error}`);
       }
     } catch (error) {
-      console.error("Erro ao enviar feedback:", error);
+      console.log("Erro ao enviar feedback:", error);
       alert("Erro ao enviar feedback. Tente novamente mais tarde.");
     }
   };
 
   const fetchPatientName = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pacientes/${cpf}`);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/progresso/pacientes/${cpf}`);
       const data = await response.json();
       console.log(data);
       setPatientName(data.nome);
     } catch (error) {
-      console.error("Erro ao buscar o nome do paciente:", error);
+      console.log("Erro ao buscar o nome do paciente:", error);
     }
   };
   useEffect(() => {
@@ -81,11 +81,11 @@ export default function PatientProfile() {
   // Função para buscar os exercícios
   const fetchExercises = async () => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/exercicios/${cpf}`);
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/progresso/exercicios/${cpf}`);
       const data: Exercise[] = await response.json();
       setExercises(data);
     } catch (error) {
-      console.error("Erro ao buscar exercícios:", error);
+      console.log("Erro ao buscar exercícios:", error);
     }
   };
 
@@ -134,9 +134,9 @@ export default function PatientProfile() {
 
   // Função para ocultar/exibir exercício
   const toggleExerciseVisibility = (exerciseId: string) => {
-    setHiddenExercises(prev =>
+    setHiddenExercises((prev) =>
       prev.includes(exerciseId)
-        ? prev.filter(id => id !== exerciseId)
+        ? prev.filter((id) => id !== exerciseId)
         : [...prev, exerciseId]
     );
   };
@@ -306,35 +306,45 @@ export default function PatientProfile() {
 
               <TouchableOpacity
                 style={styles.addExerciseButton}
-                onPress={() => router.push('/exercisesFono/adicionarExercicio')}
+                onPress={() => router.push("/exercisesFono/adicionarExercicio")}
               >
                 <Text style={styles.addExerciseText}>Adicionar exercício</Text>
               </TouchableOpacity>
               <Text style={styles.categoryTitle}>Motricidade orofacial</Text>
               <FlatList
-                data={exercises.filter(e => !hiddenExercises.includes(e.nome_exercicio))}
+                data={exercises.filter(
+                  (e) => !hiddenExercises.includes(e.nome_exercicio)
+                )}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={styles.exerciseItemDiv}
-                    onPress={() => router.push({
-                      pathname: '/exercisesFono/editarExercicio',
-                      params: { exercicio: JSON.stringify(item) }
-                    })}
+                    onPress={() =>
+                      router.push({
+                        pathname: "/exercisesFono/editarExercicio",
+                        params: { exercicio: JSON.stringify(item) },
+                      })
+                    }
                   >
                     <View style={styles.exerciseContent}>
                       <View style={styles.leftContent}>
                         <Image
-                          source={require('@/assets/images/lips.png')}
+                          source={require("@/assets/images/lips.png")}
                           style={styles.leftImage}
                         />
-                        <Text style={styles.exerciseName}>{item.nome_exercicio}</Text>
+                        <Text style={styles.exerciseName}>
+                          {item.nome_exercicio}
+                        </Text>
                       </View>
 
                       {/* Botão da lixeira */}
-                      <TouchableOpacity onPress={() => toggleExerciseVisibility(item.nome_exercicio)}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          toggleExerciseVisibility(item.nome_exercicio)
+                        }
+                      >
                         <Image
-                          source={require('@/assets/images/Vector.png')} // coloque aqui a imagem da lixeira
+                          source={require("@/assets/images/Vector.png")} // coloque aqui a imagem da lixeira
                           style={{ width: 24, height: 24 }}
                         />
                       </TouchableOpacity>
@@ -342,10 +352,8 @@ export default function PatientProfile() {
                   </TouchableOpacity>
                 )}
               />
-
             </View>
           )}
-
         </View>
       </ScrollView>
 
@@ -383,13 +391,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 20,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 24,
   },
   addExerciseText: {
     color: "white",
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   categoryTitle: {
     fontSize: 16,
@@ -403,23 +411,23 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     marginTop: 16,
     borderColor: "#FF9096",
-    borderWidth: 4
+    borderWidth: 4,
   },
   exerciseContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between', // Isso empurra os itens para as extremidades
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between", // Isso empurra os itens para as extremidades
   },
   leftContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1, // Ocupa todo o espaço disponível (exceto o necessário para a imagem direita)
   },
   leftImage: {
     width: 30,
     height: 30,
     marginRight: 10,
-    borderRadius: 5
+    borderRadius: 5,
   },
   rightImage: {
     width: 20,
@@ -428,8 +436,8 @@ const styles = StyleSheet.create({
   },
   exerciseName: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
+    fontWeight: "500",
+    color: "#333",
     flexShrink: 1, // Permite que o texto quebre se necessário
   },
   header: {

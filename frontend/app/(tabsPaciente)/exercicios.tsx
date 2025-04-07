@@ -87,7 +87,7 @@ export default function Exercicios() {
         }));
         setQtdPatients(temp.length);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
     fetchPatients();
@@ -109,7 +109,7 @@ export default function Exercicios() {
         }));
         setQuestion(temp);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
 

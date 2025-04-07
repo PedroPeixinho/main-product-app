@@ -85,7 +85,7 @@ export default function HomePaciente() {
         }));
         setQtdPatients(temp.length);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
     fetchPatients();
@@ -107,7 +107,7 @@ export default function HomePaciente() {
         }));
         setQuestion(temp);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
 
@@ -199,7 +199,6 @@ export default function HomePaciente() {
           </View>
         </View>
       ) : (
-        
         <View style={styles.tabContent}>
           <Text style={styles.subtitle}>Desempenho</Text>
           <View style={styles.infoTextDivLine}>
@@ -234,68 +233,75 @@ export default function HomePaciente() {
           <Text style={styles.subtitleWithMargin}>Frequencia</Text>
           <View style={styles.infoTextDivLine}>
             <Text>Ultimos 7 dias</Text>
-            <View style={{
+            <View
+              style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 40,
                 justifyContent: "space-between",
-            }}>
-              <Text style={{ fontWeight: "bold"}}>60%</Text>
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>60%</Text>
               <Text style={styles.regularLabel}>REGULAR</Text>
             </View>
           </View>
           <View style={styles.divider} />
           <View
-              style={{
-                margin: "5%",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              {renderDaysOfWeek(today)}
+            style={{
+              margin: "5%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            {renderDaysOfWeek(today)}
           </View>
           <View style={styles.divider} />
           <View style={styles.infoTextDivLine}>
             <Text>Ultimo mês</Text>
-            <View style={{
+            <View
+              style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 40,
                 justifyContent: "space-between",
-            }}>
-              <Text style={{ fontWeight: "bold"}}>85%</Text>
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>85%</Text>
               <Text style={styles.bomLabel}>BOM</Text>
             </View>
           </View>
           <View style={styles.infoTextDivLine}>
             <Text>Ultimos 3 meses</Text>
-            <View style={{
+            <View
+              style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 40,
                 justifyContent: "space-between",
-            }}>
-              <Text style={{ fontWeight: "bold"}}>75%</Text>
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>75%</Text>
               <Text style={styles.bomLabel}>BOM</Text>
             </View>
           </View>
           <View style={styles.infoTextDivLine}>
             <Text>Tratamento completo</Text>
-            <View style={{
+            <View
+              style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 40,
                 justifyContent: "space-between",
-            }}>
-              <Text style={{ fontWeight: "bold"}}>80%</Text>
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>80%</Text>
               <Text style={styles.bomLabel}>BOM</Text>
             </View>
           </View>
-
         </View>
       )}
     </ScrollView>

@@ -30,7 +30,7 @@ export default function PatientProfile() {
         setUser(userDetails);
         if (userDetails?.cpf) setPatientName(userDetails.nome);
       } catch (error) {
-        console.error("Erro ao buscar detalhes do usuário:", error);
+        console.log("Erro ao buscar detalhes do usuário:", error);
       }
     };
 
@@ -42,7 +42,7 @@ export default function PatientProfile() {
       await logout();
       router.push("/");
     } catch (error) {
-      console.error("Logout error:", error);
+      console.log("Logout error:", error);
     }
   };
 
@@ -94,11 +94,17 @@ export default function PatientProfile() {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Tem certeza que deseja sair?</Text>
 
-            <TouchableOpacity style={styles.logoutConfirmButton} onPress={confirmLogout}>
+            <TouchableOpacity
+              style={styles.logoutConfirmButton}
+              onPress={confirmLogout}
+            >
               <Text style={styles.logoutConfirmText}>Sair</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setShowModal(false)}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => setShowModal(false)}
+            >
               <Text style={styles.cancelText}>Voltar</Text>
             </TouchableOpacity>
           </View>

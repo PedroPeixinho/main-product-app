@@ -34,7 +34,7 @@ export default function AllExerciseCompletedScreen() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };

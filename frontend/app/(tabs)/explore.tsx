@@ -42,7 +42,7 @@ export default function Explore() {
         }));
         setPatients(temp);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.log("Error fetching patients:", error);
       }
     };
     fetchPatients();

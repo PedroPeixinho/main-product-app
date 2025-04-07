@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
@@ -38,7 +38,7 @@ export default function Exercicios() {
         setExercises(formattedData);
         setFilteredExercises(formattedData); // Inicializa os exercícios filtrados
       } catch (error) {
-        console.error("Erro ao buscar exercícios:", error);
+        console.log("Erro ao buscar exercícios:", error);
       }
     };
 
@@ -89,12 +89,17 @@ export default function Exercicios() {
                 <TouchableOpacity
                   style={styles.exerciseItemDiv}
                   key={item.id}
-                  onPress={() => router.push('/exercisesFono/lateralizar')}
+                  onPress={() => router.push("/exercisesFono/lateralizar")}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Image
-                      source={require('@/assets/images/lips.png')} // ou require('../assets/exemplo.png') se for local
-                      style={{ width: 40, height: 40, marginRight: 10, borderRadius: 5 }}
+                      source={require("@/assets/images/lips.png")} // ou require('../assets/exemplo.png') se for local
+                      style={{
+                        width: 40,
+                        height: 40,
+                        marginRight: 10,
+                        borderRadius: 5,
+                      }}
                     />
                     <Text style={{ color: "#50525A", fontWeight: "600" }}>
                       {item.nome_exercicio}
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     marginTop: 16,
     borderColor: "#FF9096",
-    borderWidth: 4
+    borderWidth: 4,
   },
   emptyText: {
     textAlign: "center",

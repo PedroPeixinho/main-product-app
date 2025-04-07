@@ -26,7 +26,7 @@ export default function StartExercise() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };
@@ -44,7 +44,7 @@ export default function StartExercise() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };
@@ -115,11 +115,11 @@ export default function StartExercise() {
             {id_exercicio == "1"
               ? "1x10"
               : id_exercicio == "2"
-                ? "Protruir e retrair"
+                ? "1x10"
                 : id_exercicio == "3"
-                  ? "Inflar e desinflar"
+                  ? "1x10"
                   : id_exercicio == "4"
-                    ? "Boca de peixe"
+                    ? "1x10"
                     : "Exercicio nao cadastrado"}
           </Text>
         </View>
@@ -139,13 +139,38 @@ export default function StartExercise() {
               </Text>
             </>
           ) : id_exercicio == "2" ? (
-            <Text style={styles.info}>Protruir e retrair</Text>
+            <>
+              <Text style={styles.info}>
+                1 ) Realizar 10x de cada lado, 1 vez ao dia
+              </Text>
+              <Text style={styles.info}>
+                2) Com a boca aberta, protruir (colocar para fora) e retrair
+                (puxar para dentro) a língua.
+              </Text>
+            </>
           ) : id_exercicio == "3" ? (
-            <Text style={styles.info}>"Inflar e desinflar"</Text>
+            <>
+              <Text style={styles.info}>
+                1 ) Realizar 10x de cada lado, 1 vez ao dia
+              </Text>
+              <Text style={styles.info}>
+                2) Inflar cada lado da bochecha, um por vez, com os lábios
+                fechados
+              </Text>
+            </>
           ) : id_exercicio == "4" ? (
-            <Text style={styles.info}>"Boca de peixe"</Text>
+            <>
+              <Text style={styles.info}>
+                1 ) Realizar 10x de cada lado, 1 vez ao dia
+              </Text>
+              <Text style={styles.info}>
+                2 ) Com os lábios fechados, encher a boca de ar e fazer os
+                lábios vibrarem, como se estivesse imitando o som de um motor ou
+                fazendo “brbrbr” com a boca
+              </Text>
+            </>
           ) : (
-            <Text style={styles.info}>"Exercicio nao cadastrado"</Text>
+            <Text style={styles.info}>Exercicio nao cadastrado</Text>
           )}
         </View>
 

@@ -8,7 +8,8 @@ import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ExerciseCompletedScreen() {
-  const { id_exercicio, videoURL, result, nomeVideo, duration } = useLocalSearchParams();
+  const { id_exercicio, videoURL, result, nomeVideo, duration } =
+    useLocalSearchParams();
   const [date, setDate] = useState(new Date());
   const [minutes, setMinutes] = useState("");
   const [seconds, setSeconds] = useState("");
@@ -27,12 +28,11 @@ export default function ExerciseCompletedScreen() {
       const totalSeconds = parseInt(duration);
       const mins = Math.floor(totalSeconds / 60);
       const secs = totalSeconds % 60;
-  
+
       setMinutes(String(mins).padStart(1, "0"));
       setSeconds(String(secs).padStart(2, "0"));
     }
   }, [duration]);
-  
 
   const handleStopVideo = async () => {
     if (videoRef.current) {
@@ -45,7 +45,7 @@ export default function ExerciseCompletedScreen() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };
@@ -63,7 +63,7 @@ export default function ExerciseCompletedScreen() {
           }
         }
       } catch (error) {
-        console.error("Erro ao manipular o vídeo:", error);
+        console.log("Erro ao manipular o vídeo:", error);
       }
     }
   };

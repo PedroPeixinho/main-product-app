@@ -43,12 +43,12 @@ export default async function uploadVideoService(
     if (response.status === 200) {
       console.log("Vídeo enviado com sucesso!");
     } else {
-      console.error("Falha ao enviar o vídeo.");
+      console.log("Falha ao enviar o vídeo.");
     }
 
     return response;
   } catch (error) {
-    console.error("Erro ao enviar o vídeo:", error);
+    console.log("Erro ao enviar o vídeo:", error);
     throw error;
   }
 }
