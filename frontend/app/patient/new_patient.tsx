@@ -93,7 +93,7 @@ export default function RegisterScreen() {
       }
   
       // Store token and navigate to home
-      await AsyncStorage.setItem("token", data.token);
+      //await AsyncStorage.setItem("token", data.token);
       router.push('../(tabs)/explore');  // MUDAR ROTA
   
     } catch (error) {
