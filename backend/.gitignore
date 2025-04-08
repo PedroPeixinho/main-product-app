@@ -1,4 +1,6 @@
 # Logs
+.env
+generated/prisma/
 logs
 *.log
 npm-debug.log*
@@ -11,6 +13,8 @@ node_modules/
 
 # Optional npm cache directory
 .npm
+
+.mp4
 
 # TypeScript cache
 *.tsbuildinfo
@@ -27,10 +31,12 @@ dist/
 lib/
 
 # Env
-.env
 .env.test
 .env.dev
 .env.prod
 
 # Deploy
 .vercel
+
+#db
+.db

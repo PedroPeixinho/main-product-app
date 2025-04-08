@@ -7,9 +7,11 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import FloatingAction from "@/components/FloatingActionButton";
+import { PacienteService } from "@/services/pacientes";
+import WideButton from "@/components/wideButton";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface Patient {
   id: string;
@@ -23,116 +25,32 @@ interface Patient {
 export default function Explore() {
   const router = useRouter();
   const [searchNomePaciente, setSearchNomePaciente] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("todos");
-  const [patients, setPatients] = useState<Patient[]>([
-    {
-      id: "1",
-      nome: "Miguel Oliveira",
-      diaConsulta: 0,
-      status: "emAcompanhamento",
-      horarioConsulta: "08:00",
-      avatarUrl: "https://avatars.githubusercontent.com/u/55458349?v=4",
-    },
-    {
-      id: "2",
-      nome: "Maria Cavalcante",
-      diaConsulta: 1,
-      status: "emAvaliacao",
-      horarioConsulta: "09:00",
-    },
-    {
-      id: "3",
-      nome: "Carlos Henrique",
-      diaConsulta: 2,
-      status: "concluido",
-      horarioConsulta: "10:00",
-    },
-    {
-      id: "4",
-      nome: "Ana Bolonha",
-      diaConsulta: 3,
-      status: "emAcompanhamento",
-      horarioConsulta: "11:00",
-    },
-    {
-      id: "5",
-      nome: "Pedro Henrique",
-      diaConsulta: 4,
-      status: "emAvaliacao",
-      horarioConsulta: "12:00",
-    },
-    {
-      id: "6",
-      nome: "Fernanda Nery",
-      diaConsulta: 5,
-      status: "concluido",
-      horarioConsulta: "13:00",
-    },
-    {
-      id: "7",
-      nome: "Lucas Paulo",
-      diaConsulta: 6,
-      status: "emAcompanhamento",
-      horarioConsulta: "14:00",
-    },
-    {
-      id: "8",
-      nome: "Juliana Ana",
-      diaConsulta: 0,
-      status: "emAvaliacao",
-      horarioConsulta: "15:00",
-    },
-    {
-      id: "9",
-      nome: "Rafael Leao",
-      diaConsulta: 1,
-      status: "concluido",
-      horarioConsulta: "16:00",
-    },
-    {
-      id: "10",
-      nome: "Beatriz Costa",
-      diaConsulta: 2,
-      status: "emAcompanhamento",
-      horarioConsulta: "17:00",
-    },
-    {
-      id: "11",
-      nome: "Gabriel Lins",
-      diaConsulta: 3,
-      status: "emAvaliacao",
-      horarioConsulta: "18:00",
-    },
-    {
-      id: "12",
-      nome: "Larissa Gomes",
-      diaConsulta: 4,
-      status: "concluido",
-      horarioConsulta: "19:00",
-    },
-    {
-      id: "13",
-      nome: "Thiago Galhardo",
-      diaConsulta: 5,
-      status: "emAcompanhamento",
-      horarioConsulta: "20:00",
-    },
-    {
-      id: "14",
-      nome: "Camila Cabello",
-      diaConsulta: 6,
-      status: "emAvaliacao",
-      horarioConsulta: "21:00",
-    },
-    {
-      id: "15",
-      nome: "Renato Augusto",
-      diaConsulta: 0,
-      status: "concluido",
-      horarioConsulta: "22:00",
-    },
-  ]);
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [filteredPatients, setFilteredPatients] = useState<Patient[]>(patients);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await PacienteService.getPacientes();
+        const temp: Patient[] = response.map((patient: any) => ({
+          id: patient.cpf,
+          nome: patient.nome,
+          diaConsulta: patient.dia_consulta,
+          status: patient.status,
+          horarioConsulta: patient.horario_consulta,
+          avatarUrl: patient.avatar_url,
+        }));
+        setPatients(temp);
+      } catch (error) {
+        console.log("Error fetching patients:", error);
+      }
+    };
+    fetchPatients();
+  }, []);
+
+  useEffect(() => {
+    setFilteredPatients(patients);
+  }, [patients]);
 
   const filterPatients = (searchNomePaciente: string) => {
     setSearchNomePaciente(searchNomePaciente);
@@ -144,17 +62,27 @@ export default function Explore() {
   };
 
   return (
-    <>
-      <View style={styles.floatingActionButton}>
-        <FloatingAction />
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Pacientes</Text>
       </View>
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Pacientes</Text>
-        </View>
-        <View style={styles.body}>
-          <View style={styles.divider} />
+      <View style={styles.body}>
+        <View style={styles.divider} />
+        <View
+          style={{
+            flex: 1,
+            gap: 16,
+          }}
+        >
           <View style={styles.searchBarDiv}>
+            <FontAwesome
+              name="search"
+              size={16}
+              color="#2F3036"
+              style={{
+                padding: 10,
+              }}
+            />
             <TextInput
               style={styles.input}
               onChangeText={filterPatients}
@@ -162,155 +90,126 @@ export default function Explore() {
               placeholder="Pesquise"
               keyboardType="default"
             />
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ flexDirection: "row" }}
-            >
-              {["todos", "emAcompanhamento", "emAvaliacao", "concluido"].map(
-                (status) => (
-                  <TouchableOpacity
-                    key={status}
-                    style={{
-                      marginRight: 8,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        padding: 8,
-                        borderRadius: 16,
-                        backgroundColor:
-                          selectedStatus === status ? "#006FFD" : "#EAF2FF",
-                        color: selectedStatus === status ? "#fff" : "#006FFD",
-                        fontWeight: "bold",
-                        marginTop: 16,
-                      }}
-                      onPress={() => {
-                        setSearchNomePaciente("");
-                        setSelectedStatus(status);
-                        setFilteredPatients(
-                          status === "todos"
-                            ? patients
-                            : patients.filter(
-                                (patient) => patient.status === status
-                              )
-                        );
-                      }}
-                    >
-                      {status === "todos"
-                        ? "Todos"
-                        : status === "emAcompanhamento"
-                          ? "Em acompanhamento"
-                          : status === "emAvaliacao"
-                            ? "Em avaliação"
-                            : "Concluídos"}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              )}
-            </ScrollView>
           </View>
-          <View style={styles.divider} />
-          <View style={styles.pacientesDiv}>
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: "bold",
+          <WideButton
+            text="Cadastrar paciente"
+            onPress={() => {
+              router.navigate("../patient/new_patient");
+            }}
+          />
+        </View>
+        <View style={styles.pacientesDiv}>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: "bold",
+            }}
+          >
+            {filteredPatients.length} resultados
+          </Text>
+          {filteredPatients.map((item) => (
+            <TouchableOpacity
+              style={styles.patientItemDiv}
+              key={item.id}
+              onPress={() => {
+                router.push({
+                  pathname: "../patientProfile/patientProfile",
+                  params: { cpf: item.id },
+                });
               }}
             >
-              {filteredPatients.length} resultados
-            </Text>
-            {filteredPatients.map((item) => (
-              <TouchableOpacity
-                style={styles.patientItemDiv}
-                key={item.id}
-                onPress={() => {
-                  router.navigate("../patientProfile/teste");
+              {item.avatarUrl && (
+                <Image
+                  style={{ width: 35, height: 35, borderRadius: 25 }}
+                  source={{
+                    uri: item.avatarUrl,
+                  }}
+                />
+              )}
+              {!item.avatarUrl && (
+                <View
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 25,
+                    backgroundColor: "#E7E7E7",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text>
+                    {item.nome
+                      .split(" ")
+                      .filter(
+                        (_, index, arr) =>
+                          index === 0 || index === arr.length - 1
+                      )
+                      .map((name) => name[0])
+                      .join("")}
+                  </Text>
+                </View>
+              )}
+              <View
+                style={{
+                  flex: 1,
+                  gap: 4,
                 }}
               >
-                {item.avatarUrl && (
-                  <Image
-                    style={{ width: 35, height: 35, borderRadius: 25 }}
-                    source={{
-                      uri: item.avatarUrl,
-                    }}
-                  />
-                )}
-                {!item.avatarUrl && (
-                  <View
-                    style={{
-                      width: 35,
-                      height: 35,
-                      borderRadius: 25,
-                      backgroundColor: "#E7E7E7",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text>
-                      {item.nome
-                        .split(" ")
-                        .filter(
-                          (_, index, arr) =>
-                            index === 0 || index === arr.length - 1
-                        )
-                        .map((name) => name[0])
-                        .join("")}
-                    </Text>
-                  </View>
-                )}
-                <View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "#50525A",
+                    fontFamily: "PlusJakartaSans_600SemiBold",
+                  }}
+                >
+                  {item.nome}
+                </Text>
+                <View style={styles.patientItemSubTextDiv}>
                   <Text
                     style={{
                       color: "#50525A",
-                      fontWeight: 600,
+                      fontSize: 12,
+                      fontFamily: "PlusJakartaSans_400Regular",
                     }}
                   >
-                    {item.nome}
+                    {
+                      [
+                        "Domingos",
+                        "Segundas",
+                        "Terças",
+                        "Quartas",
+                        "Quintas",
+                        "Sextas",
+                        "Sábados",
+                      ][item.diaConsulta]
+                    }
                   </Text>
-                  <View style={styles.patientItemSubTextDiv}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#50525A",
-                      }}
-                    >
-                      {
-                        [
-                          "Domingos",
-                          "Segundas",
-                          "Terças",
-                          "Quartas",
-                          "Quintas",
-                          "Sextas",
-                          "Sábados",
-                        ][item.diaConsulta]
-                      }
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#50525A",
-                      }}
-                    >
-                      |
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#50525A",
-                      }}
-                    >
-                      {item.horarioConsulta}
-                    </Text>
-                  </View>
+                  <Text
+                    style={{
+                      color: "#50525A",
+                      fontSize: 12,
+                      fontFamily: "PlusJakartaSans_400Regular",
+                    }}
+                  >
+                    |
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#50525A",
+                      fontSize: 12,
+                      fontFamily: "PlusJakartaSans_400Regular",
+                    }}
+                  >
+                    {item.horarioConsulta}
+                  </Text>
                 </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
-      </ScrollView>
-    </>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -330,25 +229,28 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    fontFamily: "MontserratAlternates_800ExtraBold",
     fontWeight: 900,
   },
   searchBarDiv: {
-    marginTop: 16,
-  },
-  filters: {
     flexDirection: "row",
+    alignItems: "center",
     marginTop: 16,
+    borderRadius: 24,
+    padding: 10,
+    backgroundColor: "#F8F9FE",
+  },
+  input: {
+    backgroundColor: "#F8F9FE",
+    flex: 1,
+    maxHeight: 40,
   },
   divider: {
     marginTop: 16,
     height: 1,
     backgroundColor: "#E7E7E7",
   },
-  input: {
-    backgroundColor: "#F8F9FE",
-    borderRadius: 24,
-    padding: 16,
-  },
+
   pacientesDiv: {
     marginTop: 16,
   },
@@ -356,18 +258,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
     padding: 16,
-    backgroundColor: "#F8F9FE",
+    backgroundColor: "#EAF3FF",
     borderRadius: 24,
     marginTop: 16,
   },
   patientItemSubTextDiv: {
     flexDirection: "row",
     gap: 8,
-  },
-  floatingActionButton: {
-    position: "absolute",
-    right: 56,
-    bottom: 56,
-    zIndex: 1,
   },
 });
